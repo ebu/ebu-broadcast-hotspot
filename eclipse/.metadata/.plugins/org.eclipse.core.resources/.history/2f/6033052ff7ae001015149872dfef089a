@@ -38,7 +38,7 @@ public class FirstActivity extends ListActivity {
                 int position, long id) {
               // When clicked, show a toast with the TextView text
               Toast.makeText(getApplicationContext(), 
-            		  reverseStringXMLRPC (((TextView) view).getText().toString()),
+            		  reverseStringXMLRPC((TextView) view).getText().toString()),
                   Toast.LENGTH_SHORT).show();
             }
           });
