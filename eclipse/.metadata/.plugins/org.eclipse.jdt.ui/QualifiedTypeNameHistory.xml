@@ -4,4 +4,8 @@
 <fullyQualifiedTypeName name="android.util.Log"/>
 <fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="ebu.hotspot.mediaplayer.R.layout"/>
+<fullyQualifiedTypeName name="android.media.MediaPlayer"/>
+<fullyQualifiedTypeName name="ebu.hotspot.mediaplayer.R.id"/>
+<fullyQualifiedTypeName name="android.widget.MediaController"/>
 </qualifiedTypeNameHistroy>
