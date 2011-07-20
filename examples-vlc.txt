@@ -1,0 +1,20 @@
+vlc v4l2:// --sout '#transcode{soverlay,ab=42,samplerate=44100,channels=1,acodec=mp4a,vcodec=h264,width=320,height=180,vfilter="canvas{width=320,height=180,aspect=16:9}",fps=25,vb=200,venc=x264{vbv-bufsize=500,partitions=all,level=12,no-cabac,subme=7,threads=4,ref=2,mixed-refs=1,bframes=0,min-keyint=1,keyint=50,trellis=2,direct=auto,qcomp=0.0,qpmax=51}}:gather:rtp{mp4a-latm,sdp=rtsp://0.0.0.0:5554/leffa.sdp}'
+
+Fails on Android because description fails. Might be related to a bug in Android 2.2.
+
+----------
+
+vlc v4l2:// --sout '#transcode{soverlay,ab=42,samplerate=44100,channels=1,acodec=mp4a,vcodec=h264,width=320,height=180,vfilter="canvas{width=320,height=180,aspect=16:9}",fps=25,vb=200,venc=x264{vbv-bufsize=500,partitions=all,level=12,no-cabac,subme=7,threads=4,ref=2,mixed-refs=1,bframes=0,min-keyint=1,keyint=50,trellis=2,direct=auto,qcomp=0.0,qpmax=51}}:gather:std{access=http,mux=mp4,dst=0.0.0.0:8080/vid.mp4}'
+
+Fails with "Failed to autodetect media content"
+
+----------
+
+vlc v4l2:// --sout='#transcode{vcodec=mp2v, acodec=mpga, width=320, height=180,vb=200,fps=25}:gather:std{access=http,mux=3gp,dst=0.0.0.0:8080/vid.3gp}'
+
+same as above
+
+----------
+
+Conclusion:
+Android can only read MPEG TS starting with version 3.0. VLC says it cannot do mp4 with streams (only files)

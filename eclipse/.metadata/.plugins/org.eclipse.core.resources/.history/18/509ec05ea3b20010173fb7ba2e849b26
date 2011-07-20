@@ -29,7 +29,7 @@ public class EBUHotspotMediaplayerActivity extends Activity {
     public void startVideoStream() {
     	VideoView videoView = (VideoView)findViewById(R.id.videoView1);
     	
-    	String url = "http://10.73.141.81:8080/vid.3gp";
+    	String url = "rtsp://10.73.141.81:8080/leffa.sdp";
         		
     	videoView.setVideoURI(Uri.parse(url));
     	
