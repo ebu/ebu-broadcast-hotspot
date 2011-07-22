@@ -6,6 +6,7 @@
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="ebu.hotspot.mediaplayer.R.layout"/>
 <fullyQualifiedTypeName name="android.media.MediaPlayer"/>
-<fullyQualifiedTypeName name="ebu.hotspot.mediaplayer.R.id"/>
 <fullyQualifiedTypeName name="android.widget.MediaController"/>
+<fullyQualifiedTypeName name="android.widget.EditText"/>
+<fullyQualifiedTypeName name="ebu.hotspot.mediaplayer.R.id"/>
 </qualifiedTypeNameHistroy>
