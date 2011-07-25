@@ -26,5 +26,21 @@ must have been mp4...
 
 ---------
 
+# YES this works !!!!
+vlc -v ~/Videos/documentariesandyou.mp4 --sout \
+"#rtp{dst=139.10.10.1,port=6024-6025,sdp=rtsp://10.73.141.81:5004/vid.sdp}"
 
-Android can only read MPEG TS starting with version 3.0. VLC says it cannot do mp4 with streams (only files)
+# use the following URI on the client:
+#rtsp://10.73.141.81:5004/vid.sdp
+
+---------
+
+Remarks:
+The documentation says that Android can only read MPEG TS starting with version 3.0.
+
+VLC says it cannot do mp4 with streams (only files), but it depends on the machine too...
+
+
+Conclusions:
+Used mp4v and not x264 as encoder. In the SDP, this either gives mp4v-es or x264, and android
+only supports the former !
