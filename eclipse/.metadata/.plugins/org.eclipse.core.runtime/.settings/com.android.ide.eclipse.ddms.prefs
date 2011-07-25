@@ -1,4 +1,4 @@
-#Sat Jul 23 00:21:48 CEST 2011
+#Mon Jul 25 17:28:05 CEST 2011
 emulatorControl.track.first=145
 emulatorControl.track.count=42
 threadPanel.stack.col4=218
@@ -22,7 +22,7 @@ com.android.ide.eclipse.ddms.logcat.tag=166
 emulatorControl.waypoint.desc=116
 devicePanel.Col4=153
 com.android.ide.eclipse.ddms.logcat.filters=first\:2\:first|
-com.android.ide.eclipse.ddms.logcat.message=976
+com.android.ide.eclipse.ddms.logcat.message=884
 devicePanel.Col1=49
 devicePanel.Col0=147
 emulatorControl.waypoint.elevation=62
