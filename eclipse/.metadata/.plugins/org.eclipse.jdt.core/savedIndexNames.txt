@@ -1,3 +1,2 @@
-INDEX VERSION 1.126+/home/bram/mercurial/ebu-hotspot-hg/eclipse/.metadata/.plugins/org.eclipse.jdt.core
-3500648400.index
+INDEX VERSION 1.126+/home/mpb/hotspot/ebu-hotspot-hg/eclipse/.metadata/.plugins/org.eclipse.jdt.core
 2010079554.index

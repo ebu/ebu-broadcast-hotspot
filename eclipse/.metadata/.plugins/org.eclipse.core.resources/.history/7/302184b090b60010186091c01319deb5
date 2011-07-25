@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="url">rtsp://10.73.141.81:5004/vid.sdp</string>
+    <string name="url">rtsp://10.73.141.81:5004/</string>
     <string name="app_name">EBU Hotspot Mediaplayer</string>
     <string name="menu1">Start Stream</string>
 </resources>
