@@ -16,5 +16,15 @@ same as above
 
 ----------
 
-Conclusion:
+On my other machine (think, arch linux), this works:
+cvlc -v dvb://frequency=578000000
+":sout=#transcode{vcodec=h264,vb=600,fps=20,scale=0.25,acodec=mp4a,ab=48,channels=2,samplerate=44100}:udp{dst=239.10.10.1:5000}"
+":sout-keep"
+
+But I was unable to find out what container that was, even though I presume it
+must have been mp4...
+
+---------
+
+
 Android can only read MPEG TS starting with version 3.0. VLC says it cannot do mp4 with streams (only files)
