@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 from time import sleep
 import dbus
-import sys
 
 rx_name = "org.openmokast.Receiver"
 rx_object_path = "/org/openmokast/Receiver"
-srg_ensemble_freq = "223936"
+srg_ensemble_freq = 223936000
 
 class ProgrammeNotInEnsembleError(Exception):
     pass
@@ -24,33 +23,30 @@ class OpenmokastReceiverRemote(object):
         return obj
 
     def tune(self, frequency):
-        """Tune to the specified frequency given in kHz"""
-        mode = 0
-        self.o.Tune(dbus.UInt32(frequency), dbus.UInt32(mode))
+        """Tune to the specified frequency given in Hz"""
+        mode = 1
+        self.o.Tune(dbus.UInt32(frequency / 1000), dbus.UInt32(mode))
+
+    def get_frequency(self):
+        f = self.o.GetFrequency()
+        return 1000 * int(f[0])
 
     def getstatus(self):
         print(str(self.o.GetStatus()))
 
-    def showensemble(self):
+    def get_ensemble(self):
         services = self.o.GetServiceArray()
-        print("services")
-        print("\n".join([str(i) + " " + str(j) for i,j in zip(*services[0:2])]))
+        return [str(j).strip() for j in services[1]]
 
-        print("components")
-        for s, name in zip(services[0], services[1]):
-            print(str(name))
-            components = self.o.GetComponentArray(s)
-            for chan, comp_name in zip(*components[0:2]):
-                print("{0}".format(chan))
-        print("")
 
     def get_programme_data(self, programme):
         """Get the service id, the component id for the specified programme"""
         services = self.o.GetServiceArray()
         servicenames = [s.strip() for s in services[1]]
+        #print("check if {0} in {1}".format(programme, servicenames))
         if programme not in servicenames:
             raise ProgrammeNotInEnsembleError("Programme '{0}' not found in ensemble '{1}'".format(
-                programme, self.o.GetStatus()))
+                programme, servicenames))
 
         serviceid = services[0][servicenames.index(programme)]
 
@@ -79,16 +75,3 @@ class OpenmokastReceiverRemote(object):
         return str(destination)
 
 
-
-
-
-rc = OpenmokastReceiverRemote()
-if len(sys.argv) > 1 and sys.argv[1] == "tune":
-    print("tuning")
-    rc.tune(srg_ensemble_freq)
-#sleep(1)
-rc.showensemble()
-try:
-    print(rc.start_decoding_programme("COULEUR 3"))
-except ProgrammeNotInEnsembleError:
-    print("COULEUR 3 not found")
