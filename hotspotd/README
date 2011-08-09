@@ -1,0 +1,8 @@
+EBU Hotspot daemon
+==================
+
+Task:
+-----
+
+The hotspot daemon communicates with the user device, and presents the available services and channels
+on the hotspot. The user device can ask for the stream information for a channel.
