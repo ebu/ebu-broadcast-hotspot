@@ -1,0 +1,17 @@
+package org.ebulabs.hotspot;
+
+import android.app.Activity;
+import android.os.Bundle;
+import apache.http;
+
+public class ChooseTechActivity extends Activity {
+    /** Called when the activity is first created. */
+	
+	apache.http.Client c;
+	
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.channelchoice);
+    }
+}

@@ -1,0 +1,8 @@
+package org.ebulabs.hotspot;
+
+import java.util.ArrayList;
+
+public class Device {
+	public String name;
+	public ArrayList<Long> frequencies;
+}
