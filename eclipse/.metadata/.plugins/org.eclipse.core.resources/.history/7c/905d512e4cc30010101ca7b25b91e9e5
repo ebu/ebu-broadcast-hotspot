@@ -1,0 +1,10 @@
+package org.ebulabs.hotspot;
+
+
+public class XMLCapabilitiesParser {
+	
+	
+	public void a() {
+		
+	}
+}

@@ -2,16 +2,16 @@ from xml.etree import ElementTree as ET
 
 VERSION = "0.1"
 
-def capabilities(servicelist):
+def capabilities(techlist):
     root = ET.Element("xml")
     root.attrib['encoding'] = 'utf-8'
     
     version = ET.SubElement(root, "version")
     version.text = VERSION
 
-    services = ET.SubElement(root, "services")
-    for serv in servicelist:
-        serv_el = ET.SubElement(services, "service")
+    techs = ET.SubElement(root, "techs")
+    for serv in techlist:
+        serv_el = ET.SubElement(techs, "tech")
         serv_el.attrib["name"] = serv.name
 
         for cap in serv.capabilities:

@@ -1,0 +1,10 @@
+package org.ebulabs.hotspot;
+
+import java.util.ArrayList;
+
+public class Tech {
+	public String name;
+	public ArrayList<String> capabilities;
+	
+	public ArrayList<Device> devices;
+}
