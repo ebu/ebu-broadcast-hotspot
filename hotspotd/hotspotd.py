@@ -119,8 +119,9 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                             self.send_error(400)
                             return
 
-                        s.devices[0].start_stream()
-                        message = ""
+                        message = s.devices[0].start_stream()
+                        self.send_response(200)
+                        self.send_header("Content-Type", "text/plain")
 
                 else:
                     self.send_response(400)
@@ -132,12 +133,21 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
         else:
             self.send_response(200)
-            self.send_header("Content-Type", "text/plain")
+            self.send_header("Content-Type", "text/html")
             message = '\n'.join([
-                'cmd {0}',
-                'path {1}',
-                'query {2}',
-                'raw path {3}']).format(self.command, parsed_url.path, parsed_url.query, self.path)
+                '<html><head><title>Hotspot</title></head>',
+                '<body>',
+                '<h1>EBU Hotspot</h1>',
+                '<a href="/hotspot/capabilities">capabilities</a><br />',
+                '<a href="/hotspot/DAB/programmes">DAB programme list</a><br />',
+                '<a href="/hotspot/DAB/programme">DAB programme info</a><br />',
+                '<a href="/hotspot/DAB/frequency">DAB frequency info</a><br />',
+                '<p>',
+                'cmd {0},',
+                'path {1},',
+                'query {2},',
+                'raw path {3},',
+                "</p>"]).format(self.command, parsed_url.path, parsed_url.query, self.path)
 
         self.end_headers()
         self.wfile.write(message)
