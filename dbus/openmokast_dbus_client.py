@@ -73,22 +73,42 @@ class OpenmokastReceiverRemote(object):
         else:
             print("Unknown transport mode " + str(tm))
 
+    def set_destination(self, programme, destination_ip, destination_port):
+        #setdestination 16449 17313 10    239.10.10.1 2720 udp
+        #               EId   SId   subch
+        eid = self.o.GetEnsemble()[0]
+        sid, subch = self.get_programme_data(programme)
+
+        self.o.SetDestination(eid, sid, subch, destination_ip, dbus.UInt32(destination_port))
+
+
+
     def start_decoding_programme(self, programme):
         destination = self.o.StartDecoding(*self.get_programme_data(programme))[0]
 
         return str(destination)
 
+    def stop_decoding_programme(self, programme):
+        success = self.o.StopDecoding(*self.get_programme_data(programme))
+
+        return success
 
 
 
 
-rc = OpenmokastReceiverRemote()
-if len(sys.argv) > 1 and sys.argv[1] == "tune":
-    print("tuning")
-    rc.tune(srg_ensemble_freq)
-#sleep(1)
-rc.showensemble()
-try:
-    print(rc.start_decoding_programme("COULEUR 3"))
-except ProgrammeNotInEnsembleError:
-    print("COULEUR 3 not found")
+if __name__ == "__main__":
+    import time
+    rc = OpenmokastReceiverRemote()
+    if len(sys.argv) > 1 and sys.argv[1] == "tune":
+        print("tuning")
+        rc.tune(srg_ensemble_freq)
+    #sleep(1)
+    rc.showensemble()
+    try:
+        print(rc.stop_decoding_programme("COULEUR 3"))
+        time.sleep(1)
+        print(rc.set_destination("COULEUR 3", "239.10.10.1", 2720))
+        time.sleep(1)
+        print(rc.start_decoding_programme("COULEUR 3"))
+    except ProgrammeNotInEnsembleError:
+        print("COULEUR 3 not found")

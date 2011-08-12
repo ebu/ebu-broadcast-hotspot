@@ -116,7 +116,8 @@ class DABController(DeviceController):
         return ens
 
     def set_programme(self, programme):
-        print("is {0} in {1}".format(programme, self.rc.get_ensemble()))
+        #print("is {0} in {1}".format(programme, self.rc.get_ensemble()))
+        print("DAB set programme to {0}".format(programme))
         if programme in self.rc.get_ensemble():
             self._programme = programme
             return True
@@ -127,19 +128,26 @@ class DABController(DeviceController):
         raise NotImplementedError()
 
     def get_stream_url(self):
+        print("DAB get stream URL")
         if self._programme is None:
             return None
 
         if self._programme in self._destination:
+            print("DAB stream URL is {0}".format(self._destination[self._programme]))
             return self._destination[self._programme]
         else:
             return ""
 
     def start_stream(self):
+        print("DAB start stream (stop_decoding_programme, set_destination, start_decoding_programme)")
         if self._programme is None:
             return False
         else:
+            sid, subch = self.rc.get_programme_data(self._programme)
+            self.rc.stop_decoding_programme(self._programme)
+            self.rc.set_destination(self._programme, "0.0.0.0", 10000 + ((sid + 30000) % 65000), "http")
             self._destination[self._programme] = self.rc.start_decoding_programme(self._programme)
+            print("DAB stream {0}".format(self._destination[self._programme]))
 
     def stop_stream(self): # who cares ?
         return True

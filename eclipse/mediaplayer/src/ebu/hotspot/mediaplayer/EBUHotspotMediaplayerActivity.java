@@ -15,6 +15,7 @@ import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+
 public class EBUHotspotMediaplayerActivity extends Activity {
 	
 	MediaPlayer mediaPlayer;
