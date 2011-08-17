@@ -9,6 +9,7 @@
 # - (and therefore, control the the streaming program)
 
 from openmokast_dbus_remote import *
+import time
 
 class DeviceController(object):
     """Abstract class defining what functions a device controller has to implement"""
@@ -143,14 +144,16 @@ class DABController(DeviceController):
         if self._programme is None:
             return False
         else:
-            sid, subch = self.rc.get_programme_data(self._programme)
+            eid, sid = self.rc.get_programme_data(self._programme)
             self.rc.stop_decoding_programme(self._programme)
-            self.rc.set_destination(self._programme, "0.0.0.0", 10000 + ((sid + 30000) % 65000), "http")
+            time.sleep(1)
+            self.rc.set_destination(self._programme, myip, 10000 + ((sid + 30000) % 55000), "http")
             self._destination[self._programme] = self.rc.start_decoding_programme(self._programme)
             print("DAB stream {0}".format(self._destination[self._programme]))
+            return self._destination[self._programme]
 
     def stop_stream(self): # who cares ?
-        return True
+        return self.rc.stop_decoding_programme(self._programme)
 
 
 class DVBController(DeviceController):

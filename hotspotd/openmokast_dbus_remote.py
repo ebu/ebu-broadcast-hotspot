@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from time import sleep
+import time
 import dbus
 
 rx_name = "org.openmokast.Receiver"
@@ -7,6 +7,7 @@ rx_object_path = "/org/openmokast/Receiver"
 srg_ensemble_freq = 223936000
 
 udp_dest = "239.10.10.1"
+myip = "192.168.1.114"
 
 class ProgrammeNotInEnsembleError(Exception):
     pass
@@ -39,6 +40,11 @@ class OpenmokastReceiverRemote(object):
     def get_ensemble(self):
         services = self.o.GetServiceArray()
         return [str(j).strip() for j in services[1]]
+
+    def is_decoding(self, programme):
+        sid, eid = self.get_programme_data(programme)
+
+        return self.o.IsDecoding(eid, sid)
 
 
     def get_programme_data(self, programme):
@@ -77,8 +83,9 @@ class OpenmokastReceiverRemote(object):
         eid = self.o.GetEnsemble()[0]
         sid, subch = self.get_programme_data(programme)
 
+        time.sleep(1)
+        print("SetDestination({0},{1},{2},{3},{4},{5})".format(eid, sid, subch, destination_ip, dbus.UInt32(destination_port), proto))
         self.o.SetDestination(eid, sid, subch, destination_ip, dbus.UInt32(destination_port), proto)
-
 
 
     def start_decoding_programme(self, programme):
@@ -87,7 +94,10 @@ class OpenmokastReceiverRemote(object):
         return str(destination)
 
     def stop_decoding_programme(self, programme):
-        success = self.o.StopDecoding(*self.get_programme_data(programme))
-
-        return success
+        program_data = self.get_programme_data(programme)
+        running = self.o.IsDecoding(*program_data)
+        if running:
+            success = self.o.StopDecoding(*program_data)
+            return success
+        return True
 
