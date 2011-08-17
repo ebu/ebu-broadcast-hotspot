@@ -42,9 +42,12 @@ class OpenmokastReceiverRemote(object):
         return [str(j).strip() for j in services[1]]
 
     def is_decoding(self, programme):
-        sid, eid = self.get_programme_data(programme)
+        sid, subid = self.get_programme_data(programme)
 
-        return self.o.IsDecoding(eid, sid)
+        return self.o.IsDecoding(eid, subid)
+
+    def get_ensemble_id(self):
+        return int(self.o.GetEnsemble()[0])
 
 
     def get_programme_data(self, programme):

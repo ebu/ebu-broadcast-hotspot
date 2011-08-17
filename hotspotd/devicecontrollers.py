@@ -9,6 +9,7 @@
 # - (and therefore, control the the streaming program)
 
 from openmokast_dbus_remote import *
+from xml.etree import ElementTree as ET
 import time
 
 class DeviceController(object):
@@ -32,7 +33,7 @@ class DeviceController(object):
     def set_programme(self, programme):
         raise NotImplementedError()
 
-    def get_additional_info(self):
+    def fill_additional_info(self):
         raise NotImplementedError()
 
     def get_stream_url(self):
@@ -68,7 +69,7 @@ class DummyController(DeviceController):
         self._programme = programme
         return True
 
-    def get_additional_info(self):
+    def fill_additional_info(self):
         return "(No additional info available for dummy device)"
 
     def get_stream_url(self):
@@ -125,8 +126,20 @@ class DABController(DeviceController):
         else:
             return False
 
-    def get_additional_info(self):
-        raise NotImplementedError()
+    def fill_additional_info(self, info_element):
+        sid, subchid = self.rc.get_programme_data(self._programme)
+        eid = self.rc.get_ensemble_id()
+
+        eid_el = ET.SubElement(info_element, "eid")
+        eid_el.text = str(int(eid))
+
+        sid_el = ET.SubElement(info_element, "sid")
+        sid_el.text = str(int(sid))
+
+        subch_el = ET.SubElement(info_element, "subchid")
+        subch_el.text = str(int(subchid))
+        return True
+        
 
     def get_stream_url(self):
         print("DAB get stream URL")
@@ -144,10 +157,10 @@ class DABController(DeviceController):
         if self._programme is None:
             return False
         else:
-            eid, sid = self.rc.get_programme_data(self._programme)
+            eid, subch = self.rc.get_programme_data(self._programme)
             self.rc.stop_decoding_programme(self._programme)
             time.sleep(1)
-            self.rc.set_destination(self._programme, myip, 10000 + ((sid + 30000) % 55000), "http")
+            self.rc.set_destination(self._programme, myip, 10000 + ((subch + 30000) % 55000), "http")
             self._destination[self._programme] = self.rc.start_decoding_programme(self._programme)
             print("DAB stream {0}".format(self._destination[self._programme]))
             return self._destination[self._programme]

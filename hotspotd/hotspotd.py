@@ -104,6 +104,9 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                         url_el = ET.SubElement(p_el, "url")
                         url_el.text = s.devices[0].get_stream_url()
 
+                        info_el = ET.SubElement(p_el, "info")
+                        s.devices[0].fill_additional_info(info_el)
+
                         message = ET.tostring(root, encoding="utf-8")
                         self.send_response(200)
                         self.send_header("Content-Type", "text/xml")
