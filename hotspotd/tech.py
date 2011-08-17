@@ -25,6 +25,9 @@ class Tech(object):
     def __str__(self):
         return self.name
 
+    def reload(self):
+        return str([d.reload() for d in self.devices])
+
 # some example techs, can be considered as singletons
 DVB = Tech('DVB', [dc.DVBController()], [CAP_VIDEO, CAP_AUDIO])
 DAB = Tech('DAB', [dc.DABController()], [CAP_AUDIO, CAP_SLIDESHOW])

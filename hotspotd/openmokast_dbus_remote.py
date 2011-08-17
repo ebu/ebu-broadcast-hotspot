@@ -6,8 +6,9 @@ rx_name = "org.openmokast.Receiver"
 rx_object_path = "/org/openmokast/Receiver"
 srg_ensemble_freq = 223936000
 
-udp_dest = "239.10.10.1"
-myip = "192.168.1.114"
+#udp_multicast_dest = "239.10.10.1"
+#udp_dest = "127.0.0.1"
+#myip = "192.168.1.114"
 
 class ProgrammeNotInEnsembleError(Exception):
     pass
@@ -15,15 +16,13 @@ class ProgrammeNotInEnsembleError(Exception):
 class OpenmokastReceiverRemote(object):
 
     def __init__(self):
-        self.o = self._getControlObject()
+        self._getControlObject()
 
     def _getControlObject(self):
         """Connect to dbus and initialise object to talk with
         openmokast"""
         bus = dbus.SessionBus()
-        obj = bus.get_object(rx_name, rx_object_path)
-
-        return obj
+        self.o = bus.get_object(rx_name, rx_object_path)
 
     def tune(self, frequency):
         """Tune to the specified frequency given in Hz"""

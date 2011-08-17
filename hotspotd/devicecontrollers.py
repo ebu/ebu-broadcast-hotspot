@@ -12,11 +12,16 @@ from openmokast_dbus_remote import *
 from xml.etree import ElementTree as ET
 import time
 
+localhost = "127.0.0.1"
+
 class DeviceController(object):
     """Abstract class defining what functions a device controller has to implement"""
 
     def __init__(self):
         self.dev_id = None
+
+    def reload(self):
+        raise NotImplementedError()
 
     def get_frequency_list(self):
         raise NotImplementedError()
@@ -52,6 +57,9 @@ class DummyController(DeviceController):
         self.dev_id = "dummy0"
         self._freq = 0
         self._programme = "foo"
+
+    def reload(self):
+        return "Nothing to do"
 
     def get_frequency_list(self):
         return [0]
@@ -99,6 +107,11 @@ class DABController(DeviceController):
 
     def get_frequency_list(self):
         return [223936000]
+
+    def reload(self):
+        # TODO should we clear _destination ?
+        self.rc = OpenmokastReceiverRemote()
+        return "Reloaded"
 
     def set_frequency(self, frequency):
         print("Tuning openmokast to {0} Hz".format(frequency))
@@ -160,7 +173,7 @@ class DABController(DeviceController):
             eid, subch = self.rc.get_programme_data(self._programme)
             self.rc.stop_decoding_programme(self._programme)
             time.sleep(1)
-            self.rc.set_destination(self._programme, myip, 10000 + ((subch + 30000) % 55000), "http")
+            self.rc.set_destination(self._programme, localhost, 10000 + ((subch + 30000) % 55000), "udp")
             self._destination[self._programme] = self.rc.start_decoding_programme(self._programme)
             print("DAB stream {0}".format(self._destination[self._programme]))
             return self._destination[self._programme]
