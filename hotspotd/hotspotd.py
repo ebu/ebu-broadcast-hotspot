@@ -119,7 +119,7 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                             self.send_error(400)
                             return
 
-                        message = s.devices[0].start_stream()
+                        message = str(s.devices[0].start_stream())
                         self.send_response(200)
                         self.send_header("Content-Type", "text/plain")
 
