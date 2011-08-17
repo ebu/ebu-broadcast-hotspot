@@ -14,6 +14,15 @@ import urlparse
 
 # The urls must be http://host/hotspot/<something>
 base_url = "hotspot"
+help_message = '\n'.join([
+        '<html><head><title>Hotspot</title></head>',
+        '<body>',
+        '<h1>EBU Hotspot</h1>',
+        '<a href="/hotspot/capabilities">capabilities</a><br />',
+        '<a href="/hotspot/DAB/programmes">DAB programme list</a><br />',
+        '<a href="/hotspot/DAB/programme">DAB programme info</a><br />',
+        '<a href="/hotspot/DAB/frequency">DAB frequency info</a><br />',
+        '<a href="/hotspot/DAB/reload">DAB Reload</a><br />'])
 
 class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_GET(self):
@@ -36,7 +45,12 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             self.send_error(404)
             return
 
-        if p[2] == "capabilities":
+        if len(p) == 2:
+            message = help_message
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html")
+
+        elif p[2] == "capabilities":
             if get:
                 message = capabilities(techlist)
                 self.send_response(200)
@@ -126,6 +140,12 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                         self.send_response(200)
                         self.send_header("Content-Type", "text/plain")
 
+                elif cmd == "reload": # reload the tech
+                    if get:
+                        message = s.reload()
+                        self.send_response(200)
+                        self.send_header("Content-Type", "text/plain")
+
                 else:
                     self.send_response(400)
                     self.send_header("Content-Type", "text/plain")
@@ -137,20 +157,7 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         else:
             self.send_response(200)
             self.send_header("Content-Type", "text/html")
-            message = '\n'.join([
-                '<html><head><title>Hotspot</title></head>',
-                '<body>',
-                '<h1>EBU Hotspot</h1>',
-                '<a href="/hotspot/capabilities">capabilities</a><br />',
-                '<a href="/hotspot/DAB/programmes">DAB programme list</a><br />',
-                '<a href="/hotspot/DAB/programme">DAB programme info</a><br />',
-                '<a href="/hotspot/DAB/frequency">DAB frequency info</a><br />',
-                '<p>',
-                'cmd {0},',
-                'path {1},',
-                'query {2},',
-                'raw path {3},',
-                "</p>"]).format(self.command, parsed_url.path, parsed_url.query, self.path)
+            message = help_message
 
         self.end_headers()
         self.wfile.write(message)
