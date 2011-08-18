@@ -165,5 +165,10 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 if __name__ == "__main__":
     s = BaseHTTPServer.HTTPServer(('0.0.0.0', 8080), HotspotHandler)
     print("Starting Hotspotd HTTP server")
-    s.serve_forever()
+    try:
+        s.serve_forever()
+    except KeyboardInterrupt:
+        print("Leaving")
+        print("")
+        [t.shutdown() for t in techlist]
         
