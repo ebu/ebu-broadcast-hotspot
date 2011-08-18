@@ -22,7 +22,7 @@
     <svrinfobitrate>256</svrinfobitrate>
     <svrinfoquality>4.0</svrinfoquality>
     <svrinfochannels>2</svrinfochannels>
-    <svrinfosamplerate>44100</svrinfosamplerate>
+    <svrinfosamplerate>48000</svrinfosamplerate>
     <!-- Allow the server to advertise the stream on a public YP directory: -->
     <svrinfopublic>1</svrinfopublic>
 </ezstream>
