@@ -6,11 +6,16 @@ import os, os.path
 import tempfile
 import time
 import threading
+from misc import *
 
 # Goal of this module:
 # Get udp data from openmokast, convert to wav, convert to mp3, give to ezstream
 
 localhost = "127.0.0.1"
+
+icecast_ip = myip
+icecast_port = "8000"
+
 UDP_BUFSIZE = 4096
 SOCK_TIMEOUT = 2
 
@@ -20,23 +25,6 @@ args_mpg123 = shlex.split("mpg123 -w - -")
 args_lame = shlex.split("lame - -")
 args_ezstream = shlex.split("ezstream -c") # ATTN! Followed by ezstream.xml !
 
-class Colour:
-    PURPLE = '\033[95m'
-    BLUE = '\033[94m'
-    GREEN = '\033[92m'
-    YELLOW = '\033[93m'
-    RED = '\033[91m'
-    ENDC = '\033[0m'
-
-def log(message):
-    print(Colour.BLUE + "Openmokast->Icecast: {0}".format(message) + Colour.ENDC)
-
-def warn(message):
-    print(Colour.YELLOW + "Openmokast->Icecast: {0}".format(message) + Colour.ENDC)
-
-def err(message):
-    print(Colour.RED + "Openmokast->Icecast: {0}".format(message) + Colour.ENDC)
-
 class OpenMokastIceCastAdapter(threading.Thread):
     """This class implements the following pipeline:
     nc -ul 127.0.0.1 40003 | mpg123 -w - -  | lame - - | ezstream -c ezstream.xml
@@ -44,10 +32,12 @@ class OpenMokastIceCastAdapter(threading.Thread):
     used to stream openmokast to icecast.
     """
 
+    icecast_url_prefix = "http://" + icecast_ip + ":" + icecast_port + "/"
+
     def __init__(self, udp_port, mount_point):
         threading.Thread.__init__(self)
 
-        log("init")
+        Log.d("Openmokast->Icecast", "init")
         self.udp_port = udp_port
         self.mount_point = mount_point
 
@@ -62,11 +52,8 @@ class OpenMokastIceCastAdapter(threading.Thread):
     def __str__(self):
         return "<OM-Ice Adapter: {0} -> {1} [{2}]>".format(self.udp_port, self.mount_point, "ready" if self.ready else "stopped")
 
-    def __del__(self):
-        self.destroy()
-
-    def destroy(self):
-        log("destroying {0}".format(self))
+    def _destroy(self):
+        Log.d("Openmokast->Icecast", "destroying {0}".format(self))
 
         self.running = False
         self.ready = False
@@ -74,16 +61,16 @@ class OpenMokastIceCastAdapter(threading.Thread):
         try:
             self.sock.close()
         except:
-            err("Failed to close socket")
+            Log.e("Openmokast->Icecast", "Failed to close socket")
 
         # kill subprocesses
         for i, p in enumerate([self.mpg123, self.lame, self.ezstream]):
             if p is not None:
                 try:
-                    log("terminating {0} {1}".format(i, p))
+                    Log.d("Openmokast->Icecast", "terminating {0} {1}".format(i, p))
                     p.terminate()
                 except:
-                    err("Failed to term subprocesses")
+                    Log.e("Openmokast->Icecast", "Failed to term subprocesses")
 
         time.sleep(0.5)
 
@@ -92,26 +79,27 @@ class OpenMokastIceCastAdapter(threading.Thread):
                 try:
                     rval = p.poll()
                     if rval is None: # process has not terminated
-                        log("killing {0}".format(i))
+                        Log.d("Openmokast->Icecast", "killing {0}".format(i))
                         p.kill()
                 except:
-                    err("Failed to kill subprocesses")
+                    Log.e("Openmokast->Icecast", "Failed to kill subprocesses")
 
         # delete ezstream configuration file
         try:
             if self.ezstream_xml_fname is not None:
-                log("erasing ezstream file")
+                Log.d("Openmokast->Icecast", "erasing ezstream file")
                 os.remove(self.ezstream_xml_fname)
         except OSError as e:
             if os.path.isfile(self.ezstream_xml_fname):
-                print("WARNING: Could not remove temporary file {0}".format(self.ezstream_xml_fname))
+                Log.w("Openmokast->Icecast", "Could not remove temporary file {0}".format(self.ezstream_xml_fname))
 
-        log("{0} destroy complete".format(self))
+        Log.i("Openmokast->Icecast", "{0} destroy complete".format(self))
 
     def stop(self):
-        log("Stopping {0}".format(self))
+        Log.i("Openmokast->Icecast", "Stopping {0}".format(self))
         self.running = False
         self.sock.close()
+        self.join()
 
     def run(self):
         try:
@@ -121,12 +109,12 @@ class OpenMokastIceCastAdapter(threading.Thread):
             self.prepare_ezstream()
             self.prepare_finalise()
         except Exception as e:
-            err("preparation failed")
+            Log.e("Openmokast->Icecast", "preparation failed")
             import traceback, sys
             print(Colour.RED)
             traceback.print_exc(file=sys.stdout)
             print(Colour.ENDC)
-            self.destroy()
+            self._destroy()
             return
 
         self.running = True
@@ -134,17 +122,20 @@ class OpenMokastIceCastAdapter(threading.Thread):
         data = ""
 
         try:
-            log("starting loop")
+            Log.i("Openmokast->Icecast", "starting loop")
             while self.running:
                 try:
                     data = self.sock.recv(UDP_BUFSIZE)
+                    self.mpg123.stdin.write(data)
                 except socket.timeout:
-                    warn("No data received for {0} seconds".format(SOCK_TIMEOUT))
+                    Log.w("Openmokast->Icecast", "No data received for {0} seconds".format(SOCK_TIMEOUT))
                     continue
-                self.mpg123.communicate(data)
+                except IOError:
+                    Log.w("Openmokast->Icecast", "IOError in main loop. Leaving")
+                    break
         finally:
-            log("loop terminated")
-            self.destroy()
+            Log.i("Openmokast->Icecast", "loop terminated")
+            self._destroy()
 
     def prepare_socket(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -196,8 +187,6 @@ if __name__ == "__main__":
         p("STOPPING")
         adapt.stop()
 
-    p("JOIN")
-    adapt.destroy()
     adapt.join()
     
     p("DONE")

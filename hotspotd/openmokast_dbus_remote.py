@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import time
 import dbus
+from misc import *
 
 rx_name = "org.openmokast.Receiver"
 rx_object_path = "/org/openmokast/Receiver"
@@ -8,7 +9,6 @@ srg_ensemble_freq = 223936000
 
 #udp_multicast_dest = "239.10.10.1"
 #udp_dest = "127.0.0.1"
-#myip = "192.168.1.114"
 
 class ProgrammeNotInEnsembleError(Exception):
     pass
@@ -86,7 +86,7 @@ class OpenmokastReceiverRemote(object):
         sid, subch = self.get_programme_data(programme)
 
         time.sleep(1)
-        print("SetDestination({0},{1},{2},{3},{4},{5})".format(eid, sid, subch, destination_ip, dbus.UInt32(destination_port), proto))
+        Log.d("openmokast_dbus", "SetDestination({0},{1},{2},{3},{4},{5})".format(eid, sid, subch, destination_ip, dbus.UInt32(destination_port), proto))
         self.o.SetDestination(eid, sid, subch, destination_ip, dbus.UInt32(destination_port), proto)
 
 

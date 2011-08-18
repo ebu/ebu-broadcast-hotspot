@@ -6,8 +6,7 @@ Communicates with user device"""
 
 from xml.etree import ElementTree as ET
 from tech import *
-
-from misc import capabilities
+from misc import *
 
 import BaseHTTPServer
 import urlparse
