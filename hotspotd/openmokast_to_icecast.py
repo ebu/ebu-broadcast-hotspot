@@ -9,14 +9,15 @@ import threading
 from misc import *
 
 # Goal of this module:
-# Get udp data from openmokast, convert to wav, convert to mp3, give to ezstream
+# Get tcp data from openmokast, convert to wav, convert to mp3, give to ezstream
 
-localhost = "127.0.0.1"
+# assumes openmokast runs on localhost:
+om_host = "127.0.0.1"
 
 icecast_ip = myip
 icecast_port = "8000"
 
-UDP_BUFSIZE = 4096
+BUFSIZE = 4096
 SOCK_TIMEOUT = 2
 
 ezstream_xml_template_fname = "ezstream.xml.template"
@@ -34,11 +35,11 @@ class OpenMokastIceCastAdapter(threading.Thread):
 
     icecast_url_prefix = "http://" + icecast_ip + ":" + icecast_port + "/"
 
-    def __init__(self, udp_port, mount_point):
+    def __init__(self, om_port, mount_point):
         threading.Thread.__init__(self)
 
         Log.d("Openmokast->Icecast", "init")
-        self.udp_port = udp_port
+        self.om_port = om_port
         self.mount_point = mount_point
 
         # filename of ezstream.xml configuration
@@ -50,7 +51,7 @@ class OpenMokastIceCastAdapter(threading.Thread):
         self.running = False
 
     def __str__(self):
-        return "<OM-Ice Adapter: {0} -> {1} [{2}]>".format(self.udp_port, self.mount_point, "ready" if self.ready else "stopped")
+        return "<OM-Ice Adapter: {0} -> {1} [{2}]>".format(self.om_port, self.mount_point, "ready" if self.ready else "stopped")
 
     def _destroy(self):
         Log.d("Openmokast->Icecast", "destroying {0}".format(self))
@@ -125,7 +126,7 @@ class OpenMokastIceCastAdapter(threading.Thread):
             Log.i("Openmokast->Icecast", "starting loop")
             while self.running:
                 try:
-                    data = self.sock.recv(UDP_BUFSIZE)
+                    data = self.sock.recv(BUFSIZE)
                     self.mpg123.stdin.write(data)
                 except socket.timeout:
                     Log.w("Openmokast->Icecast", "No data received for {0} seconds".format(SOCK_TIMEOUT))
@@ -138,9 +139,14 @@ class OpenMokastIceCastAdapter(threading.Thread):
             self._destroy()
 
     def prepare_socket(self):
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock.settimeout(SOCK_TIMEOUT)
-        self.sock.bind((localhost, self.udp_port))
+        if OPENMOKAST_UDP:
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            self.sock.settimeout(SOCK_TIMEOUT)
+            self.sock.bind((om_host, self.om_port))
+        elif OPENMOKAST_TCP:
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.sock.settimeout(SOCK_TIMEOUT)
+            self.sock.connect((om_host, self.om_port))
 
     def prepare_mpg123(self):
         self.mpg123 = subprocess.Popen(args_mpg123, stdin=subprocess.PIPE, stdout=subprocess.PIPE)

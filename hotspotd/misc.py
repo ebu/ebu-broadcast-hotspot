@@ -2,6 +2,10 @@ from xml.etree import ElementTree as ET
 
 VERSION = "0.1"
 
+# Select what protocol to use between openmokast and the icecast adapter
+OPENMOKAST_UDP = True
+OPENMOKAST_TCP = False
+
 myip = "192.168.1.114"
 
 def capabilities(techlist):

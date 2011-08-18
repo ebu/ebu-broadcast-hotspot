@@ -1,6 +1,7 @@
 # Definition of the different techs
 
 import devicecontrollers as dc
+
 ############################### {{{
 # tech capabilities constants
 
@@ -27,6 +28,13 @@ class Tech(object):
 
     def reload(self):
         return str([d.reload() for d in self.devices])
+
+    def shutdown(self):
+        for d in self.devices:
+            try:
+                d.shutdown()
+            except:
+                print("Tech: shutting down {0} failed".format(d))
 
 # some example techs, can be considered as singletons
 DVB = Tech('DVB', [dc.DVBController()], [CAP_VIDEO, CAP_AUDIO])

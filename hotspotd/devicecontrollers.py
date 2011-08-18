@@ -53,6 +53,9 @@ class DeviceController(object):
     def stop_stream(self):
         raise NotImplementedError()
 
+    def shutdown(self):
+        raise NotImplementedError()
+
 class DummyController(DeviceController):
     """Does nothing. But does not crash either"""
    
@@ -90,6 +93,9 @@ class DummyController(DeviceController):
         return True
 
     def stop_stream(self):
+        return True
+
+    def shutdown(self):
         return True
     
 
@@ -189,18 +195,26 @@ class DABController(DeviceController):
             return False
         else:
             eid, subch = self.rc.get_programme_data(self._programme)
-            self.rc.stop_decoding_programme(self._programme)
+            self.stop_stream()
             time.sleep(1)
-            self.rc.set_destination(self._programme, localhost, 10000 + ((subch + 30000) % 55000), "udp")
+
+            if OPENMOKAST_UDP:
+                proto = "udp"
+            elif OPENMOKAST_TCP:
+                proto = "tcp"
+            else:
+                raise Exception("Openmoko protocol not defined!")
+
+            self.rc.set_destination(self._programme, localhost, 10000 + ((subch + 30000) % 55000), proto)
             openmokast_destination = self.rc.start_decoding_programme(self._programme)
-            Log.d("devctrl", "DAB stream to {0}".format(openmokast_destination))
+            Log.d("devctrl", "OM streams to {0}".format(openmokast_destination))
 
             mountpoint = self._programme.replace(" ", "_")
-            udpport = urlparse(openmokast_destination).port
+            om_port = urlparse(openmokast_destination).port
 
-            Log.d("devctrl", "Mountpoint {0}, udpport {1}".format(mountpoint, udpport))
+            Log.d("devctrl", "Mountpoint {0}, om_port {1}".format(mountpoint, om_port))
 
-            a = OpenMokastIceCastAdapter(udpport, mountpoint)
+            a = OpenMokastIceCastAdapter(om_port, mountpoint)
 
             self._destination[self._programme] = OpenMokastIceCastAdapter.icecast_url_prefix + mountpoint
             self._adapters[self._programme] = a
@@ -212,7 +226,15 @@ class DABController(DeviceController):
             return self._destination[self._programme]
 
     def stop_stream(self): # who cares ?
-        return self.rc.stop_decoding_programme(self._programme)
+        if self._programme in self._adapters:
+            self._adapters[self._programme].stop()
+
+        self.rc.stop_decoding_programme(self._programme)
+
+
+    def shutdown(self):
+        for a in self._adapters.values():
+            a.stop()
 
 
 class DVBController(DeviceController):
@@ -220,3 +242,5 @@ class DVBController(DeviceController):
         self.dev_id = "/dev/dvb/adapter0/"
     def get_frequency_list(self):
         return [578000000]
+    def shutdown(self):
+        pass
