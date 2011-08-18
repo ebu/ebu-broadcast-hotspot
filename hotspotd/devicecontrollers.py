@@ -9,8 +9,11 @@
 # - (and therefore, control the the streaming program)
 
 from openmokast_dbus_remote import *
+from openmokast_to_icecast import OpenMokastIceCastAdapter
 from xml.etree import ElementTree as ET
+from urlparse import urlparse
 import time
+from misc import *
 
 localhost = "127.0.0.1"
 
@@ -95,9 +98,14 @@ class DABController(DeviceController):
         self.dev_id = "dab0"
 
         self.rc = OpenmokastReceiverRemote()
-
+        
+        # programme being modified or read from now
+        # This assumes only one client for that controller...
         self._programme = None
+
+        # keys: programmes
         self._destination = {}
+        self._adapters = {} 
 
         #self.set_frequency(self.get_frequency_list()[0]) # tune to first available freq
         #try:
@@ -111,10 +119,16 @@ class DABController(DeviceController):
     def reload(self):
         # TODO should we clear _destination ?
         self.rc = OpenmokastReceiverRemote()
+
+        for a in self._adapters.values():
+            a.stop()
+
+        self._adapters = {}
+
         return "Reloaded"
 
     def set_frequency(self, frequency):
-        print("Tuning openmokast to {0} Hz".format(frequency))
+        Log.i("devctrl", "Tuning openmokast to {0} Hz".format(frequency))
         self.rc.tune(frequency)
 
     def get_frequency(self):
@@ -132,7 +146,7 @@ class DABController(DeviceController):
 
     def set_programme(self, programme):
         #print("is {0} in {1}".format(programme, self.rc.get_ensemble()))
-        print("DAB set programme to {0}".format(programme))
+        Log.i("devctrl", "DAB set programme to {0}".format(programme))
         if programme in self.rc.get_ensemble():
             self._programme = programme
             return True
@@ -140,7 +154,11 @@ class DABController(DeviceController):
             return False
 
     def fill_additional_info(self, info_element):
-        sid, subchid = self.rc.get_programme_data(self._programme)
+        try:
+            sid, subchid = self.rc.get_programme_data(self._programme)
+        except ProgrammeNotInEnsembleError:
+            return False
+
         eid = self.rc.get_ensemble_id()
 
         eid_el = ET.SubElement(info_element, "eid")
@@ -155,18 +173,18 @@ class DABController(DeviceController):
         
 
     def get_stream_url(self):
-        print("DAB get stream URL")
+        Log.d("devctrl", "DAB get stream URL")
         if self._programme is None:
             return None
 
         if self._programme in self._destination:
-            print("DAB stream URL is {0}".format(self._destination[self._programme]))
+            Log.d("devctrl", "DAB stream URL is {0}".format(self._destination[self._programme]))
             return self._destination[self._programme]
         else:
             return ""
 
     def start_stream(self):
-        print("DAB start stream (stop_decoding_programme, set_destination, start_decoding_programme)")
+        Log.d("devctrl", "DAB start stream (stop_decoding_programme, set_destination, start_decoding_programme)")
         if self._programme is None:
             return False
         else:
@@ -174,8 +192,23 @@ class DABController(DeviceController):
             self.rc.stop_decoding_programme(self._programme)
             time.sleep(1)
             self.rc.set_destination(self._programme, localhost, 10000 + ((subch + 30000) % 55000), "udp")
-            self._destination[self._programme] = self.rc.start_decoding_programme(self._programme)
-            print("DAB stream {0}".format(self._destination[self._programme]))
+            openmokast_destination = self.rc.start_decoding_programme(self._programme)
+            Log.d("devctrl", "DAB stream to {0}".format(openmokast_destination))
+
+            mountpoint = self._programme.replace(" ", "_")
+            udpport = urlparse(openmokast_destination).port
+
+            Log.d("devctrl", "Mountpoint {0}, udpport {1}".format(mountpoint, udpport))
+
+            a = OpenMokastIceCastAdapter(udpport, mountpoint)
+
+            self._destination[self._programme] = OpenMokastIceCastAdapter.icecast_url_prefix + mountpoint
+            self._adapters[self._programme] = a
+
+            Log.d("devctrl", "URL: {0}".format(self._destination[self._programme]))
+
+            a.start()
+
             return self._destination[self._programme]
 
     def stop_stream(self): # who cares ?
