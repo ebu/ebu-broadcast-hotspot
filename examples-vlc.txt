@@ -44,3 +44,5 @@ VLC says it cannot do mp4 with streams (only files), but it depends on the machi
 Conclusions:
 Used mp4v and not x264 as encoder. In the SDP, this either gives mp4v-es or x264, and android
 only supports the former !
+
+Therefore : vcodec=mp4v !
