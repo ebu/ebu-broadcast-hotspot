@@ -2,9 +2,14 @@ from xml.etree import ElementTree as ET
 
 VERSION = "0.1"
 
-# Select what protocol to use between openmokast and the icecast adapter
-OPENMOKAST_UDP = True
-OPENMOKAST_TCP = False
+# Select what protocol to use between openmokast and the adapter
+OPENMOKAST_UDP = False
+OPENMOKAST_HTTP = True
+OPENMOKAST_TCP = False # warning, unsupported by openmokast
+
+# Select what adapter tu use between openmokast and the user device
+ADAPTER_ICECAST = False
+ADAPTER_VLC = True
 
 myip = "192.168.1.114"
 

@@ -31,6 +31,8 @@ class OpenMokastIceCastAdapter(threading.Thread):
     nc -ul 127.0.0.1 40003 | mpg123 -w - -  | lame - - | ezstream -c ezstream.xml
 
     used to stream openmokast to icecast.
+
+    Since it inherits from Thread, and overrides run(), you must call start() after instanciating it.
     """
 
     icecast_url_prefix = "http://" + icecast_ip + ":" + icecast_port + "/"
@@ -147,6 +149,8 @@ class OpenMokastIceCastAdapter(threading.Thread):
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.sock.settimeout(SOCK_TIMEOUT)
             self.sock.connect((om_host, self.om_port))
+        elif OPENMOKAST_HTTP:
+            raise NotImplementedError("openmokast_to_icecast HTTP openmokast access")
 
     def prepare_mpg123(self):
         self.mpg123 = subprocess.Popen(args_mpg123, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
@@ -193,6 +197,4 @@ if __name__ == "__main__":
         p("STOPPING")
         adapt.stop()
 
-    adapt.join()
-    
     p("DONE")
