@@ -10,6 +10,7 @@
 
 from openmokast_dbus_remote import *
 from openmokast_to_icecast import OpenMokastIceCastAdapter
+from openmokast_to_vlc import OpenMokastVLCAdapter, audio_params
 from xml.etree import ElementTree as ET
 from urlparse import urlparse
 import time
@@ -202,21 +203,37 @@ class DABController(DeviceController):
                 proto = "udp"
             elif OPENMOKAST_TCP:
                 proto = "tcp"
+            elif OPENMOKAST_HTTP:
+                proto = "http"
             else:
                 raise Exception("Openmoko protocol not defined!")
 
-            self.rc.set_destination(self._programme, localhost, 10000 + ((subch + 30000) % 55000), proto)
+            om_port = 40000 + subch
+
+            self.rc.set_destination(self._programme, localhost, om_port, proto)
             openmokast_destination = self.rc.start_decoding_programme(self._programme)
             Log.d("devctrl", "OM streams to {0}".format(openmokast_destination))
 
-            mountpoint = self._programme.replace(" ", "_")
-            om_port = urlparse(openmokast_destination).port
+            if ADAPTER_ICECAST:
+                mountpoint = self._programme.replace(" ", "_")
+                om_port = urlparse(openmokast_destination).port
 
-            Log.d("devctrl", "Mountpoint {0}, om_port {1}".format(mountpoint, om_port))
+                Log.d("devctrl", "Mountpoint {0}, om_port {1}".format(mountpoint, om_port))
 
-            a = OpenMokastIceCastAdapter(om_port, mountpoint)
+                a = OpenMokastIceCastAdapter(om_port, mountpoint)
 
-            self._destination[self._programme] = OpenMokastIceCastAdapter.icecast_url_prefix + mountpoint
+                self._destination[self._programme] = OpenMokastIceCastAdapter.icecast_url_prefix + mountpoint
+
+            elif ADAPTER_VLC:
+                vlc_port = om_port + 10000
+
+                # http:// is implicit
+                dest = "{ip}:{port}/audio.{ext}".format(ip=myip, port=vlc_port, ext=audio_params['container'])
+
+                a = OpenMokastVLCAdapter(openmokast_destination, dest)
+
+                self._destination[self._programme] = "http://" + dest
+
             self._adapters[self._programme] = a
 
             Log.d("devctrl", "URL: {0}".format(self._destination[self._programme]))
