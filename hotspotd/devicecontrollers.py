@@ -19,7 +19,9 @@ from misc import *
 localhost = "127.0.0.1"
 
 class DeviceController(object):
-    """Abstract class defining what functions a device controller has to implement"""
+    """Abstract class defining what functions a device controller has to implement.
+    
+    Each device might receive several programme at once on one frequency."""
 
     def __init__(self):
         self.dev_id = None
@@ -39,19 +41,16 @@ class DeviceController(object):
     def get_programme_list(self):
         raise NotImplementedError()
 
-    def set_programme(self, programme):
+    def fill_additional_info(self, programme, info_element):
         raise NotImplementedError()
 
-    def fill_additional_info(self):
+    def get_stream_url(self, programme):
         raise NotImplementedError()
 
-    def get_stream_url(self):
+    def start_stream(self, programme):
         raise NotImplementedError()
 
-    def start_stream(self):
-        raise NotImplementedError()
-
-    def stop_stream(self):
+    def stop_stream(self, programme):
         raise NotImplementedError()
 
     def shutdown(self):
@@ -80,20 +79,17 @@ class DummyController(DeviceController):
     def get_programme_list(self):
         return ["foo", "bar"]
 
-    def set_programme(self, programme):
-        self._programme = programme
-        return True
+    def fill_additional_info(self, programme, info_element):
+        eid_el = ET.SubElement(info_element, "comment")
+        eid_el.text = "No additional info available for dummy device"
 
-    def fill_additional_info(self):
-        return "(No additional info available for dummy device)"
-
-    def get_stream_url(self):
+    def get_stream_url(self, programme):
         return ""
 
-    def start_stream(self):
+    def start_stream(self, programme):
         return True
 
-    def stop_stream(self):
+    def stop_stream(self, programme):
         return True
 
     def shutdown(self):
@@ -106,12 +102,7 @@ class DABController(DeviceController):
 
         self.rc = OpenmokastReceiverRemote()
         
-        # programme being modified or read from now
-        # This assumes only one client for that controller...
-        self._programme = None
-
         # keys: programmes
-        self._destination = {}
         self._adapters = {} 
 
         #self.set_frequency(self.get_frequency_list()[0]) # tune to first available freq
@@ -124,7 +115,6 @@ class DABController(DeviceController):
         return [223936000]
 
     def reload(self):
-        # TODO should we clear _destination ?
         self.rc = OpenmokastReceiverRemote()
 
         for a in self._adapters.values():
@@ -141,28 +131,14 @@ class DABController(DeviceController):
     def get_frequency(self):
         return self.rc.get_frequency()
 
-    def get_programme(self):
-        if self._programme is None:
-            return ""
-        return self._programme
-
     def get_programme_list(self):
         ens = self.rc.get_ensemble()
         #print("Ensemble: {0}".format(ens))
         return ens
 
-    def set_programme(self, programme):
-        #print("is {0} in {1}".format(programme, self.rc.get_ensemble()))
-        Log.i("devctrl", "DAB set programme to {0}".format(programme))
-        if programme in self.rc.get_ensemble():
-            self._programme = programme
-            return True
-        else:
-            return False
-
-    def fill_additional_info(self, info_element):
+    def fill_additional_info(self, programme, info_element):
         try:
-            sid, subchid = self.rc.get_programme_data(self._programme)
+            sid, subchid = self.rc.get_programme_data(programme)
         except ProgrammeNotInEnsembleError:
             return False
 
@@ -179,24 +155,24 @@ class DABController(DeviceController):
         return True
         
 
-    def get_stream_url(self):
+    def get_stream_url(self, programme):
         Log.d("devctrl", "DAB get stream URL")
-        if self._programme is None:
+        if programme is None:
             return None
 
-        if self._programme in self._destination:
-            Log.d("devctrl", "DAB stream URL is {0}".format(self._destination[self._programme]))
-            return self._destination[self._programme]
+        if programme in self._adapters:
+            Log.d("devctrl", "DAB stream URL is {0}".format(self._adapters[programme].get_url()))
+            return self._adapters[programme].get_url()
         else:
             return ""
 
-    def start_stream(self):
+    def start_stream(self, programme):
         Log.d("devctrl", "DAB start stream (stop_decoding_programme, set_destination, start_decoding_programme)")
-        if self._programme is None:
+        if programme is None:
             return False
         else:
-            eid, subch = self.rc.get_programme_data(self._programme)
-            self.stop_stream()
+            eid, subch = self.rc.get_programme_data(programme)
+            self.stop_stream(programme)
             time.sleep(1)
 
             if OPENMOKAST_UDP:
@@ -210,19 +186,17 @@ class DABController(DeviceController):
 
             om_port = 40000 + subch
 
-            self.rc.set_destination(self._programme, localhost, om_port, proto)
-            openmokast_destination = self.rc.start_decoding_programme(self._programme)
+            self.rc.set_destination(programme, localhost, om_port, proto)
+            openmokast_destination = self.rc.start_decoding_programme(programme)
             Log.d("devctrl", "OM streams to {0}".format(openmokast_destination))
 
             if ADAPTER_ICECAST:
-                mountpoint = self._programme.replace(" ", "_")
+                mountpoint = programme.replace(" ", "_")
                 om_port = urlparse(openmokast_destination).port
 
                 Log.d("devctrl", "Mountpoint {0}, om_port {1}".format(mountpoint, om_port))
 
                 a = OpenMokastIceCastAdapter(om_port, mountpoint)
-
-                self._destination[self._programme] = OpenMokastIceCastAdapter.icecast_url_prefix + mountpoint
 
             elif ADAPTER_VLC:
                 vlc_port = om_port + 10000
@@ -232,21 +206,19 @@ class DABController(DeviceController):
 
                 a = OpenMokastVLCAdapter(openmokast_destination, dest)
 
-                self._destination[self._programme] = "http://" + dest
+            self._adapters[programme] = a
 
-            self._adapters[self._programme] = a
-
-            Log.d("devctrl", "URL: {0}".format(self._destination[self._programme]))
+            Log.d("devctrl", "URL: {0}".format(a.get_url()))
 
             a.start()
 
-            return self._destination[self._programme]
+            return a.get_url()
 
-    def stop_stream(self): # who cares ?
-        if self._programme in self._adapters:
-            self._adapters[self._programme].stop()
+    def stop_stream(self, programme):
+        if programme in self._adapters:
+            self._adapters[programme].stop()
 
-        self.rc.stop_decoding_programme(self._programme)
+        self.rc.stop_decoding_programme(programme)
 
 
     def shutdown(self):

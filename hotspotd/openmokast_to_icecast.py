@@ -98,6 +98,9 @@ class OpenMokastIceCastAdapter(threading.Thread):
 
         Log.i("Openmokast->Icecast", "{0} destroy complete".format(self))
 
+    def get_url(self):
+        return OpenMokastIceCastAdapter.icecast_url_prefix + self.mountpoint
+
     def stop(self):
         Log.i("Openmokast->Icecast", "Stopping {0}".format(self))
         self.running = False
