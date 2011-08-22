@@ -10,6 +10,11 @@ from misc import *
 # Get mp2 from openmokast (HTTP), feed to vlc, which transcodes and streams
 # over http
 
+# TODO:
+# - choice between HTTP and RTSP
+
+vlc_url_prefix = "http://"
+
 # assumes openmokast runs on localhost:
 om_host = "127.0.0.1"
 
@@ -25,14 +30,14 @@ audio_params = {
 def get_vlc_args(source, destination):
     transcode = "vcodec=none,acodec={codec},ab={codec_bitrate},channels={channels},samplerate={samplerate}".format(**audio_params)
     http = "dst={0}".format(destination)
-    return ["cvlc", source, "--sout", "#transcode{" + transcode + "}:http{" + http + "}"]
+    return ["cvlc", source, "--sout", "#transcode{" + transcode + "}:http{" + http + "}"] # TODO RTSP
 
 class OpenMokastVLCAdapter(object):
     """This class implements the following command:
     cvlc -v http://localhost:40003 \
          --sout "#transcode{vcodec=none,acodec=mp3,ab=320,channels=2,samplerate=48000}:http{dst=:8080/c3.mp3}"
 
-    used to stream openmokast to the user device.
+    used to stream openmokast to the user device. There is one adapter for each programme.
     """
 
     def __init__(self, om_access, destination):
@@ -85,6 +90,9 @@ class OpenMokastVLCAdapter(object):
     def stop(self):
         Log.i(Log_src, "Stopping {0}".format(self))
         self._destroy()
+
+    def get_url(self):
+        return vlc_url_prefix + self.destination
 
     def start(self):
         """Start VLC.

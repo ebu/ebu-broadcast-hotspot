@@ -7,6 +7,7 @@ Communicates with user device"""
 from xml.etree import ElementTree as ET
 from tech import *
 from misc import *
+import cgi
 
 import BaseHTTPServer
 import urlparse
@@ -21,16 +22,52 @@ help_message = '\n'.join([
         '<a href="/hotspot/DAB/programmes">DAB programme list</a><br />',
         '<a href="/hotspot/DAB/programme">DAB programme info</a><br />',
         '<a href="/hotspot/DAB/frequency">DAB frequency info</a><br />',
-        '<a href="/hotspot/DAB/reload">DAB Reload</a><br />'])
+        '<a href="/hotspot/DAB/reload">DAB Reload</a><br />',
+        '<form method="post" action="/hotspot/DAB/frequency"><p>',
+        'Frequency : <input type="text" name="value" value="223936000" />',
+        '<input type="submit" value="Set DAB Frequency" />',
+        '</p></form>',
+        '<form method="post" action="/hotspot/DAB/programme"><p>',
+        'Frequency : <input type="text" name="value" value="ESPACE 2" />',
+        '<input type="submit" value="Set DAB Programme" />',
+        '</p></form>'
+        
+        ])
+
+class HotspotState:
+    programme = None
 
 class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+    """This class handles HTTP requests to control the hotspot.
+
+    For now, it is stateful, and remembers what programme the user has chosen.
+    In a multi-user system, this would have to be changed."""
+
     def do_GET(self):
         return self.do_post_and_get('GET')
         
     def do_POST(self):
-        return self.do_post_and_get('POST')
+        post_content_type = self.headers.getheader('Content-Type')
 
-    def do_post_and_get(self, method):
+        content_length = int(self.headers.getheader('Content-Length'))
+        if content_length == 0:
+            print("Content length is zero !")
+
+        if post_content_type == "application/x-www-form-urlencoded":
+            form = cgi.FieldStorage(
+            fp=self.rfile, 
+            headers=self.headers,
+            environ={'REQUEST_METHOD':'POST',
+                     'CONTENT_TYPE':self.headers['Content-Type'],
+                     })
+
+            post_data = form['value'].value
+        else:
+            post_data = self.rfile.read(content_length)
+
+        return self.do_post_and_get('POST', post_data)
+
+    def do_post_and_get(self, method, post_data=""):
         # convenience
         get = (method == 'GET')
         post = (method == 'POST')
@@ -75,11 +112,7 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                         message = str(freq)
 
                     if post:
-                        content_length = int(self.headers.getheader('Content-Length'))
-                        if content_length == 0:
-                            print("Content length is zero !")
-
-                        freq = self.rfile.read(content_length)
+                        freq = post_data
                         print("new frequency {0}".format(freq))
 
                         try:
@@ -107,40 +140,38 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
                 elif cmd == "programme": # current programme
                     if get:
-                        programme = s.devices[0].get_programme()
                         root = ET.Element("xml")
                         root.attrib['encoding'] = 'utf-8'
                         
                         p_el = ET.SubElement(root, "programme")
-                        p_el.attrib['name'] = programme
-
                         url_el = ET.SubElement(p_el, "url")
-                        url_el.text = s.devices[0].get_stream_url()
-
                         info_el = ET.SubElement(p_el, "info")
-                        s.devices[0].fill_additional_info(info_el)
+
+                        if HotspotState.programme is not None:
+                            p_el.attrib['name'] = HotspotState.programme
+                            url_el.text = s.devices[0].get_stream_url(HotspotState.programme)
+                            s.devices[0].fill_additional_info(HotspotState.programme, info_el)
+                        else:
+                            p_el.attrib['name'] = ""
 
                         message = ET.tostring(root, encoding="utf-8")
                         self.send_response(200)
                         self.send_header("Content-Type", "text/xml")
                     if post:
-                        content_length = int(self.headers.getheader('Content-Length'))
-                        if content_length == 0:
-                            print("programme: Content length is zero !")
+                        HotspotState.programme = post_data
+                        print("new programme {0}".format(HotspotState.programme))
 
-                        programme = self.rfile.read(content_length)
-                        print("new programme {0}".format(programme))
-
-                        if not s.devices[0].set_programme(programme):
+                        if not s.devices[0].start_stream(HotspotState.programme):
                             self.send_error(400)
                             return
 
-                        message = str(s.devices[0].start_stream())
+                        message = s.devices[0].get_stream_url(HotspotState.programme)
+
                         self.send_response(200)
                         self.send_header("Content-Type", "text/plain")
 
                 elif cmd == "reload": # reload the tech
-                    if get:
+                    if get: # TODO, should be POST
                         message = s.reload()
                         self.send_response(200)
                         self.send_header("Content-Type", "text/plain")
