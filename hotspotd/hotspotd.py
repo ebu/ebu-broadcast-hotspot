@@ -63,7 +63,8 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
             post_data = form['value'].value
         else:
-            post_data = self.rfile.read(content_length)
+            self.send_error(400)
+            return
 
         return self.do_post_and_get('POST', post_data)
 
@@ -125,13 +126,12 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 elif cmd == "programmes": # list of programmes
                     if get:
                         programmes = s.devices[0].get_programme_list()
-                        root = ET.Element("xml")
-                        root.attrib['encoding'] = 'utf-8'
+                        root = ET.Element("programmes")
                         
                         for p in programmes:
                             p_el = ET.SubElement(root, "programme")
                             p_el.text = p
-                        message = ET.tostring(root, encoding="utf-8")
+                        message = xml_prolog + ET.tostring(root, encoding="utf-8")
                         self.send_response(200)
                         self.send_header("Content-Type", "text/xml")
                     if post:
@@ -140,21 +140,18 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
                 elif cmd == "programme": # current programme
                     if get:
-                        root = ET.Element("xml")
-                        root.attrib['encoding'] = 'utf-8'
+                        root = ET.Element("programme")
                         
-                        p_el = ET.SubElement(root, "programme")
-                        url_el = ET.SubElement(p_el, "url")
-                        info_el = ET.SubElement(p_el, "info")
+                        name_el = ET.SubElement(root, "name")
+                        url_el = ET.SubElement(root, "url")
+                        info_el = ET.SubElement(root, "info")
 
                         if HotspotState.programme is not None:
-                            p_el.attrib['name'] = HotspotState.programme
+                            name_el.text = HotspotState.programme
                             url_el.text = s.devices[0].get_stream_url(HotspotState.programme)
                             s.devices[0].fill_additional_info(HotspotState.programme, info_el)
-                        else:
-                            p_el.attrib['name'] = ""
 
-                        message = ET.tostring(root, encoding="utf-8")
+                        message = xml_prolog + ET.tostring(root, encoding="utf-8")
                         self.send_response(200)
                         self.send_header("Content-Type", "text/xml")
                     if post:
