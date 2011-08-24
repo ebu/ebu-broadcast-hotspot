@@ -8,15 +8,11 @@ from misc import *
 
 # Goal of this module:
 # Get mp2 from openmokast (HTTP), feed to vlc, which transcodes and streams
-# over http
-
-# TODO:
-# - choice between HTTP and RTSP
-
-vlc_url_prefix = "http://"
+# over http or RTSP
 
 # assumes openmokast runs on localhost:
 om_host = "127.0.0.1"
+multicast = "139.10.10.1"
 
 Log_src = "OpenMokast->VLC"
 
@@ -26,6 +22,24 @@ audio_params = {
         "channels" : 2,
         "codec" : "mp3",
         "container" : "mp3"}
+
+if VLC_PROTOCOL == "HTTP":
+    vlc_url_prefix = "http://"
+    def vlc_destination_cmdline(destination):
+        return "http{" + "dst={0}".format(destination) + "}"
+
+elif VLC_PROTOCOL == "RTSP":
+    vlc_url_prefix = "rtsp://"
+    audio_params['container'] = "sdp"
+    def vlc_destination_cmdline(destination):
+        return "rtp{" + "dst={multicast},port={portrange},sdp=rtsp://{dst}".format(
+                multicast=multicast,
+                portrange="6025-6125",
+                dst=destination) + "}"
+else:
+    Log.e("OpenMokast_to_VLC", "ERROR! VLC_PROTOCOL {0} not supported".format(VLC_PROTOCOL))
+    import sys
+    sys.exit(1)
 
 def get_vlc_args(source, destination):
     transcode = "vcodec=none,acodec={codec},ab={codec_bitrate},channels={channels},samplerate={samplerate}".format(**audio_params)

@@ -11,11 +11,16 @@ OPENMOKAST_TCP = False # warning, unsupported by openmokast
 ADAPTER_ICECAST = False
 ADAPTER_VLC = True
 
+# Select what protocol VLC uses to stream to android
+# Valid choices: HTTP, RTSP
+VLC_PROTOCOL = "HTTP"
+
 myip = "192.168.1.114"
 
+xml_prolog = '<?xml version="1.0" encoding="utf-8" ?>'
+
 def capabilities(techlist):
-    root = ET.Element("xml")
-    root.attrib['encoding'] = 'utf-8'
+    root = ET.Element("capabilities")
     
     version = ET.SubElement(root, "version")
     version.text = VERSION
@@ -36,7 +41,7 @@ def capabilities(techlist):
                 freq_el = ET.SubElement(serv_devs, "frequency")
                 freq_el.text = str(f)
     
-    return ET.tostring(root, encoding="utf-8")
+    return xml_prolog + ET.tostring(root, encoding="utf-8")
 
 class Colour:
     PURPLE = '\033[95m'
