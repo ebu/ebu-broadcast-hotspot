@@ -1,9 +1,0 @@
-package org.ebulabs.hotspot;
-
-import android.app.Application;
-
-public class HotspotApplication extends Application {
-	
-	public Tech activeTech;
-
-}

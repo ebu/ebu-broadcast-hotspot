@@ -1,0 +1,58 @@
+package org.ebulabs.hotspot;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+import android.util.Log;
+
+
+class ProgrammeInfoHandler extends DefaultHandler {
+
+	StringBuilder currentCharacter;
+	
+	Map<String,String> infoFields;
+	String url;
+	String name;
+
+	public ProgrammeInfoHandler() {
+		super();
+		this.infoFields = new HashMap<String, String>();
+	}
+	
+	@Override
+	public void startDocument() throws SAXException {
+		currentCharacter = new StringBuilder();
+	}
+	@Override
+	public void endDocument() throws SAXException { }
+	
+	@Override
+	public void endElement(String namespaceURI, String localName, String qName) 
+    throws SAXException {
+		if (localName == "url") {
+			this.url = currentCharacter.toString();
+		}
+		
+	}
+	
+	@Override
+	public void startElement(String namespaceURI, String localName, String qName, 
+		    Attributes atts) throws SAXException {
+		Log.d("startElement", localName);
+		
+		if (localName == "programme") {
+			currentCharacter = new StringBuilder();
+			this.name = atts.getValue("", "name")
+		}
+	}
+	
+	@Override
+	public void characters(char ch[], int start, int length) {
+		currentCharacter.append(ch, start, length);
+	}
+
+}

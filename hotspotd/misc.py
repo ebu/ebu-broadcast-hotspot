@@ -2,6 +2,8 @@ from xml.etree import ElementTree as ET
 
 VERSION = "0.1"
 
+HOTSPOT_PORT = 8080
+
 # Select what protocol to use between openmokast and the adapter
 OPENMOKAST_UDP = False
 OPENMOKAST_HTTP = True
@@ -14,6 +16,12 @@ ADAPTER_VLC = True
 # Select what protocol VLC uses to stream to android
 # Valid choices: HTTP, RTSP
 VLC_PROTOCOL = "HTTP"
+
+# Service publishing through Avahi (Zeroconf)
+avahi_service_name = "EBU Broadcast Hotspot"
+avahi_service_type = "_bhcp._tcp" # Broadcast Hotspot Control Protocol. Sounds nice, doesn't it ?
+avahi_service_port = HOTSPOT_PORT
+avahi_service_TXT = "EBU Broadcast Hostpot Daemon" #TXT record for the service
 
 myip = "192.168.1.114"
 

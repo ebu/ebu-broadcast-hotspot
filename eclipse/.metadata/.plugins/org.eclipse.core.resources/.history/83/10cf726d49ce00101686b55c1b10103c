@@ -1,0 +1,30 @@
+package org.ebulabs.hotspot;
+
+import javax.jmdns.*;
+
+/** Finds the hotspot using Zeroconf */
+public class DiscoverHotspot {
+	public DiscoverHotspot() {
+		
+	}
+
+}
+
+static class SampleListener implements ServiceListener
+{
+	public void addService(JmDNS jmdns, String type, String name)
+	{
+		System.out.println("ADD: " + jmdns.getServiceInfo(type, name));
+	}
+	public void removeService(JmDNS jmdns, String type, String name)
+	{
+		System.out.println("REMOVE: " + name);
+	}
+	public void resolveService(JmDNS jmdns, String type, String name, ServiceInfo info)
+	{
+		System.out.println("RESOLVED: " + info);
+	}
+}
+
+JmDNS jmdns = new JmDNS();
+jmdns.addServiceListener("_http._tcp.local.", new SampleListener());

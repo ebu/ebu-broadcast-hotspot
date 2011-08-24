@@ -43,7 +43,7 @@ public class EBUHotspotMediaplayerActivity extends Activity {
     }
     
     public void stopAudioStream() {
-    	
+    	mediaPlayer.stop();
     }
     
     public void startAudioStream() {
@@ -51,6 +51,7 @@ public class EBUHotspotMediaplayerActivity extends Activity {
         String url = ((EditText) findViewById(R.id.urlEntry)).getText().toString();
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+    
         
         
         try {

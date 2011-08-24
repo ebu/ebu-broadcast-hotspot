@@ -7,27 +7,27 @@ Communicates with user device"""
 from xml.etree import ElementTree as ET
 from tech import *
 from misc import *
+from avahi_publish import AvahiPublisherThread
 import cgi
 
 import BaseHTTPServer
 import urlparse
 
 # The urls must be http://host/hotspot/<something>
-base_url = "hotspot"
 help_message = '\n'.join([
         '<html><head><title>Hotspot</title></head>',
         '<body>',
         '<h1>EBU Hotspot</h1>',
-        '<a href="/hotspot/capabilities">capabilities</a><br />',
-        '<a href="/hotspot/DAB/programmes">DAB programme list</a><br />',
-        '<a href="/hotspot/DAB/programme">DAB programme info</a><br />',
-        '<a href="/hotspot/DAB/frequency">DAB frequency info</a><br />',
-        '<a href="/hotspot/DAB/reload">DAB Reload</a><br />',
-        '<form method="post" action="/hotspot/DAB/frequency"><p>',
+        '<a href="/capabilities">capabilities</a><br />',
+        '<a href="/DAB/programmes">DAB programme list</a><br />',
+        '<a href="/DAB/programme">DAB programme info</a><br />',
+        '<a href="/DAB/frequency">DAB frequency info</a><br />',
+        '<a href="/DAB/reload">DAB Reload</a><br />',
+        '<form method="post" action="/DAB/frequency"><p>',
         'Frequency : <input type="text" name="value" value="223936000" />',
         '<input type="submit" value="Set DAB Frequency" />',
         '</p></form>',
-        '<form method="post" action="/hotspot/DAB/programme"><p>',
+        '<form method="post" action="/DAB/programme"><p>',
         'Frequency : <input type="text" name="value" value="ESPACE 2" />',
         '<input type="submit" value="Set DAB Programme" />',
         '</p></form>'
@@ -77,17 +77,12 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
         p = parsed_url.path.split('/')
 
-        if p[1] != base_url:
-            print(p)
-            self.send_error(404)
-            return
-
-        if len(p) == 2:
+        if len(p) == 1:
             message = help_message
             self.send_response(200)
             self.send_header("Content-Type", "text/html")
 
-        elif p[2] == "capabilities":
+        elif p[1] == "capabilities":
             if get:
                 message = capabilities(techlist)
                 self.send_response(200)
@@ -96,7 +91,7 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 self.send_error(405) # method not allowed
                 return
 
-        elif p[2] in [str(i) for i in techlist]:
+        elif p[1] in [str(i) for i in techlist]:
             if len(p) < 4:
                 self.send_response(400) # Bad Request
                 message = ""
@@ -191,12 +186,18 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         
 
 if __name__ == "__main__":
-    s = BaseHTTPServer.HTTPServer(('0.0.0.0', 8080), HotspotHandler)
-    print("Starting Hotspotd HTTP server")
+    s = BaseHTTPServer.HTTPServer(('0.0.0.0', HOTSPOT_PORT), HotspotHandler)
+    print("Starting Hotspotd")
+    # Publish the hotspot over Zeroconf
+    pub = AvahiPublisherThread()
+    pub.start()
+    print("Starting HTTP server")
     try:
         s.serve_forever()
     except KeyboardInterrupt:
         print("Leaving")
         print("")
         [t.shutdown() for t in techlist]
+    finally:
+        pub.stop()
         

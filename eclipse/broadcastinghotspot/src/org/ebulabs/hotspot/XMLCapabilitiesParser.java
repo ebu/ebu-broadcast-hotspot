@@ -1,22 +1,16 @@
 package org.ebulabs.hotspot;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.ArrayList;
 
-import javax.xml.parsers.ParserConfigurationException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-
 import android.util.Log;
-import android.widget.Toast;
 
 class CapabilitiesHandler extends DefaultHandler {
 	
@@ -58,11 +52,10 @@ class CapabilitiesHandler extends DefaultHandler {
 	@Override
 	public void startElement(String namespaceURI, String localName, String qName, 
 		    Attributes atts) throws SAXException {
-		Log.d("startElement", localName);
 		if (localName == "tech") {
 			String techname = atts.getValue("", "name");
 			if (techname == null) {
-				Log.e("startElement", "tech name is null");
+				Log.e(Utils.LOGTAG + "startElement", "tech name is null");
 				throw new SAXException("Tech has no name");
 			}
 			
@@ -72,7 +65,7 @@ class CapabilitiesHandler extends DefaultHandler {
 		else if (localName == "device") {
 			String devid = atts.getValue("", "id");
 			if (devid == null) {
-				Log.e("startElement", "device name is null");
+				Log.e(Utils.LOGTAG + "startElement", "device name is null");
 				throw new SAXException("Device has no name");
 			}
 			
@@ -97,7 +90,7 @@ public class XMLCapabilitiesParser {
 	
 	public ArrayList<Tech> techs;
 	
-	public XMLCapabilitiesParser(InputStream s) {
+	public XMLCapabilitiesParser(InputStream s) throws HotspotException {
 		SAXParserFactory spf = SAXParserFactory.newInstance();
 		SAXParser sp;
 		try {
@@ -116,7 +109,7 @@ public class XMLCapabilitiesParser {
 		} catch (Exception e) {
 			
 			e.printStackTrace();
-			techs = new ArrayList<Tech>();
+			throw new HotspotException(e);
 		}
 		
 		

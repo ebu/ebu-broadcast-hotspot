@@ -13,8 +13,11 @@
 		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="" key="selection"/>
+		<item value="Intent" key="selection"/>
 		<list key="findhistory">
+			<item value="Intent"/>
+			<item value="CHOOSE"/>
+			<item value="mMediaPlayer"/>
 			<item value="tech"/>
 			<item value="Current"/>
 		</list>

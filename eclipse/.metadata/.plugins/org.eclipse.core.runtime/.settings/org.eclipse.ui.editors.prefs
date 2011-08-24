@@ -1,4 +1,7 @@
-#Wed Aug 10 17:27:01 CEST 2011
+#Mon Aug 22 14:25:52 CEST 2011
+AbstractTextEditor.Color.Background=26,26,26
 spellingEnabled=false
+AbstractTextEditor.Color.Foreground=255,255,255
 eclipse.preferences.version=1
 overviewRuler_migration=migrated_3.1
+lineNumberRuler=true

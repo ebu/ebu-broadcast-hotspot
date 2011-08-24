@@ -1,0 +1,35 @@
+package org.ebulabs.hotspot;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class PlayProgrammeActivity extends Activity {
+	
+	private void toast(String t) {
+		Toast.makeText(getApplicationContext(), t, Toast.LENGTH_SHORT).show();
+	}
+	
+	 @Override
+	 public void onCreate(Bundle savedInstanceState) {
+		 TextView v = (TextView)findViewById(R.id.playText);
+		 
+		 v.setText("Play programme");
+		 
+		 HotspotApplication app = (HotspotApplication)getApplication();
+		 
+		 if (app.pi != null) {
+			 String t = app.pi.name + "\n" + app.pi.url;
+			  
+			 v.setText(t);
+		 }
+		 else {
+			 toast("App.pi is null !");
+			 Log.d(Utils.LOGTAG + "PlayProgrammeActivity", "app.pi null");
+		 }
+	 }
+
+}

@@ -1,0 +1,38 @@
+package org.ebulabs.hotspot;
+
+import java.net.InetAddress;
+
+import javax.jmdns.*;
+import javax.jmdns.impl.*;
+
+/** Finds the hotspot using Zeroconf */
+public class DiscoverHotspot {
+	public DiscoverHotspot() {
+
+		JmDNSImpl jmdns = new JmDNSImpl(InetAddress.getByName(("0.0.0.0"), "AndroidHotspotReceiver"));
+		jmdns.addServiceListener("_http._tcp.local.", new SampleListener());
+	}
+
+}
+
+class SampleListener implements ServiceListener
+{
+	
+	@Override
+	public void serviceAdded(ServiceEvent event) {
+		
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void serviceRemoved(ServiceEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void serviceResolved(ServiceEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+}
+

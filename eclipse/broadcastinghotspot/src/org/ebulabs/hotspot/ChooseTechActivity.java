@@ -7,6 +7,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,21 +21,41 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class ChooseTechActivity extends Activity {
 	
+	android.net.wifi.WifiManager.MulticastLock mcastlock;
+	
 	private void toast(String t) {
 		Toast.makeText(getApplicationContext(), t, Toast.LENGTH_SHORT).show();
 	}
 	
     /** Called when the activity is first created. */
-	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.techchoice);
 
+        Context context = getApplicationContext();
+        
+        android.net.wifi.WifiManager wifi =
+        	(android.net.wifi.WifiManager)context.getSystemService(android.content.Context.WIFI_SERVICE);
+        
+        mcastlock = wifi.createMulticastLock("HotspotDnsSDLock");
+        mcastlock.setReferenceCounted(true);
+        mcastlock.acquire();
+        
+        DiscoverHotspot dh = new DiscoverHotspot();
+        String zeroconf_url;
+        
+        // TODO: do better
+        while ((zeroconf_url = dh.getHotspotLocation()) == null) {}
+        
+        Log.i(Utils.LOGTAG + "onCreate choose tech", "URL from mdns " + zeroconf_url);
+        
+
         /* Get list of techs from daemon */
         
         URL url;
-        String url_sz = getString(R.string.daemon_url) + "/capabilities";
+        //String url_sz = getString(R.string.daemon_url) + "/capabilities";
+        String url_sz = zeroconf_url + "/capabilities";
 		try {
 			url = new URL(url_sz);
 		} catch (MalformedURLException e) {
@@ -42,7 +63,7 @@ public class ChooseTechActivity extends Activity {
 			return;
 		}
 		
-		Log.d("onCreate choose tech", "URL defined");
+		Log.d(Utils.LOGTAG + "onCreate choose tech", "URL defined");
 		
 		//ArrayAdapter<String> techListAdapter = new ArrayAdapter<String>(this, R.id.techList, )
 		
@@ -74,16 +95,18 @@ public class ChooseTechActivity extends Activity {
 			
 			conn = url.openConnection();
 			
-			Log.d("onCreate choose tech", "Connection opened");
+			Log.d(Utils.LOGTAG + "onCreate choose tech", "Connection opened");
 		
 	        if (!conn.getContentType().equals("text/xml")) {
 	        	toast("Error: Content-Type is not text/xml !");
-	        	Log.e("onCreate choose tech", "Content type is '" + conn.getContentType() + "'");
+	        	Log.e(Utils.LOGTAG + "onCreate choose tech", "Content type is '" + conn.getContentType() + "'");
 	        }
 	        
-	        XMLCapabilitiesParser p = new XMLCapabilitiesParser(conn.getInputStream());
+	        XMLCapabilitiesParser p;
+	        
+			p = new XMLCapabilitiesParser(conn.getInputStream());
 
-	        Log.d("onCreate choose tech", "Parsed");
+	        Log.d(Utils.LOGTAG + "onCreate choose tech", "Parsed");
 				        
 			ArrayList<String> technames = new ArrayList<String>();
 			
@@ -93,14 +116,27 @@ public class ChooseTechActivity extends Activity {
 	    	   technames.add(t.name);
 	        }
 	        
-	        Log.d("onCreate choose tech", "Created & filled technames");
+	        Log.d(Utils.LOGTAG + "onCreate choose tech", "Created & filled technames");
 	        
 	        techList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, technames));
-        
+		} 
+		catch (HotspotException e) {
+			e.printStackTrace();
+			toast("XML capabilities parser exception!");
+			Log.e(Utils.LOGTAG + "onCreate choose tech", "XMLCapaParser raised exception");
+			return;
+			
 		} catch (IOException e) {
 			toast("IO Exception");
 			e.printStackTrace();
 			return;
 		}
     }
+    
+    @Override
+    public void onPause() {
+    	super.onPause();
+    	this.mcastlock.release();
+    }
+    
 }
