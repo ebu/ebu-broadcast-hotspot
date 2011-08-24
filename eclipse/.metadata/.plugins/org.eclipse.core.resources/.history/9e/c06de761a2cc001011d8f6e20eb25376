@@ -1,0 +1,137 @@
+package org.ebulabs.hotspot;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
+
+public class ChooseProgrammeActivity extends Activity {
+	
+	private void toast(String t) {
+		Toast.makeText(getApplicationContext(), t, Toast.LENGTH_SHORT).show();
+	}
+	
+    /** Called when the activity is first created. */
+	
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.programmechoice);
+        
+        /* Get programme list from daemon */
+        
+        Tech activeTech = ((HotspotApplication)getApplication()).activeTech;
+        
+        URL url;
+        String url_sz = getString(R.string.daemon_url) + "/" + activeTech.name + "/programmes";
+		try {
+			url = new URL(url_sz);
+		} catch (MalformedURLException e) {
+			toast("Malformed URL '" + url_sz + "'");
+			return;
+		}
+		
+		Log.d("onCreate choose prog", "URL defined");
+				
+		ListView progList = (ListView)findViewById(R.id.programmeList);
+		
+		/* What happens when user clicks on programme */
+		progList.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+
+				String programmeName = ((TextView) view).getText().toString();
+				// When clicked, show a toast with the TextView text
+				Toast.makeText(getApplicationContext(), 
+						programmeName,
+						Toast.LENGTH_SHORT).show();
+
+				// Fetch info
+				Tech activeTech = ((HotspotApplication)getApplication()).activeTech;
+				URL url;
+		        String url_sz = getString(R.string.daemon_url) + "/" + activeTech.name + "/programme";
+				try {
+					url = new URL(url_sz);
+				} catch (MalformedURLException e) {
+					toast("Malformed URL '" + url_sz + "'");
+					return;
+				}
+				
+				URLConnection conn;
+				try {
+					
+					conn = url.openConnection();
+					
+					Log.d("choose prog", "Connection opened");
+				
+			        if (!conn.getContentType().equals("text/xml")) {
+			        	toast("Error: Content-Type is not text/xml !");
+			        	Log.e("choose prog", "Content type is '" + conn.getContentType() + "'");
+			        }
+			        
+			        try {
+						XMLProgrammeInfoParser p = new XMLProgrammeInfoParser(conn.getInputStream());
+						
+						Log.d("choose prog", "Setting pi in application");
+						((HotspotApplication)getApplication()).pi = p.pi;
+						
+						startActivity(new Intent("org.ebulabs.hotspot.CHOOSE_PROGRAMME"));
+						
+					} catch (HotspotException e) {
+						e.printStackTrace();
+						toast("Parsing XML Info failed");
+			        	return;
+					}
+					
+				} catch (IOException e) {
+					toast("IO Exception");
+					e.printStackTrace();
+					return;
+				}
+			}
+		});
+
+		
+        URLConnection conn;
+		try {
+			
+			conn = url.openConnection();
+			
+			Log.d("onCreate choose prog", "Connection opened");
+		
+	        if (!conn.getContentType().equals("text/xml")) {
+	        	toast("Error: Content-Type is not text/xml !");
+	        	Log.e("onCreate choose prog", "Content type is '" + conn.getContentType() + "'");
+	        }
+	        
+	        XMLProgrammesParser p = new XMLProgrammesParser(conn.getInputStream());
+	        
+	        Log.d("onCreate choose prog", "Created & filled prognames");
+	        
+	        progList.setAdapter(new ArrayAdapter<String>(
+	        		this, android.R.layout.simple_list_item_1, p.programmes));
+        
+		} catch (IOException e) {
+			toast("IO Exception");
+			e.printStackTrace();
+			return;
+		} catch (HotspotException e) {
+			toast("HotspotException");
+			e.printStackTrace();
+			return;
+		}
+    }
+}

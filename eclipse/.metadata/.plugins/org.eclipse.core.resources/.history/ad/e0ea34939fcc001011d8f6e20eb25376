@@ -1,0 +1,17 @@
+package org.ebulabs.hotspot;
+
+public class ProgrammeInfo {
+	
+	public ProgrammeInfo(String name) {
+		this.name = name;
+	}
+	
+	/** Name of the programme */
+	public String name;
+
+	/** URL where we can receive the programme */
+	public String url;
+
+	/** XML-encoded additional data */
+	public String info_xml;
+}

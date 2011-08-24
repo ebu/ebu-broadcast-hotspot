@@ -8,5 +8,7 @@ public class HotspotApplication extends Application {
 	
 	public Tech activeTech;
 	public ArrayList<Tech> allTechs;
+	
+	public ProgrammeInfo pi;
 
 }

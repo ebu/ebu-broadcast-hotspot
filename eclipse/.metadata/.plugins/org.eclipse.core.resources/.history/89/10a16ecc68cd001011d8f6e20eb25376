@@ -1,0 +1,6 @@
+package org.ebulabs.hotspot;
+
+public class Utils {
+
+	public static final String LOGTAG = "org.ebulabs.hotspot."; 
+}

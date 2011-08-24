@@ -1,0 +1,19 @@
+package org.ebulabs.hotspot;
+import java.util.ArrayList;
+
+import org.xml.sax.helpers.DefaultHandler;
+
+
+class ProgrammeInfoHandler extends DefaultHandler {
+
+	StringBuilder currentCharacter;
+	
+	ProgrammeInfo pi;
+
+	public ProgrammeInfoHandler() {
+		super();
+		
+		
+	}
+
+}

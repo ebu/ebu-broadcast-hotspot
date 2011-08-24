@@ -1,7 +1,0 @@
-package org.ebulabs.hotspot;
-
-import android.sax.*;
-
-public class XMLCapabilitiesParser {
-
-}

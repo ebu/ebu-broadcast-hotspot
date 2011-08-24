@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="android.widget.TextView"/>
 <fullyQualifiedTypeName name="ebu.hotspot.mediaplayer.R.layout"/>
-<fullyQualifiedTypeName name="android.media.MediaPlayer"/>
 <fullyQualifiedTypeName name="android.widget.MediaController"/>
 <fullyQualifiedTypeName name="android.widget.EditText"/>
 <fullyQualifiedTypeName name="ebu.hotspot.mediaplayer.R.id"/>
-<fullyQualifiedTypeName name="org.ebulabs.hotspot.R.string"/>
 <fullyQualifiedTypeName name="java.net.URLConnection"/>
 <fullyQualifiedTypeName name="java.io.BufferedReader"/>
 <fullyQualifiedTypeName name="java.io.InputStreamReader"/>
@@ -19,7 +16,6 @@
 <fullyQualifiedTypeName name="org.xml.sax.helpers.DefaultHandler"/>
 <fullyQualifiedTypeName name="org.xml.sax.Attributes"/>
 <fullyQualifiedTypeName name="java.lang.Long"/>
-<fullyQualifiedTypeName name="java.lang.StringBuilder"/>
 <fullyQualifiedTypeName name="org.ebulabs.hotspot.CapabilitiesHandler"/>
 <fullyQualifiedTypeName name="org.xml.sax.InputSource"/>
 <fullyQualifiedTypeName name="org.ebulabs.hotspot.XMLCapabilitiesParser"/>
@@ -29,17 +25,38 @@
 <fullyQualifiedTypeName name="android.widget.ArrayAdapter"/>
 <fullyQualifiedTypeName name="android.widget.ListView"/>
 <fullyQualifiedTypeName name="org.ebulabs.hotspot.R.layout"/>
-<fullyQualifiedTypeName name="java.util.List"/>
-<fullyQualifiedTypeName name="android.util.Log"/>
 <fullyQualifiedTypeName name="org.xml.sax.SAXException"/>
 <fullyQualifiedTypeName name="android.widget.Toast"/>
 <fullyQualifiedTypeName name="android.R"/>
 <fullyQualifiedTypeName name="android.R.layout"/>
 <fullyQualifiedTypeName name="android.app.Application"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
-<fullyQualifiedTypeName name="org.ebulabs.hotspot.R.id"/>
 <fullyQualifiedTypeName name="org.ebulabs.hotspot.ChooseProgrammeActivity"/>
 <fullyQualifiedTypeName name="android.content.Intent"/>
-<fullyQualifiedTypeName name="org.ebulabs.hotspot.HotspotApplication"/>
 <fullyQualifiedTypeName name="org.ebulabs.hotspot.XMLProgrammesParser"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="org.ebulabs.hotspot.ProgrammeInfoHandler"/>
+<fullyQualifiedTypeName name="org.ebulabs.hotspot.ProgrammeInfo"/>
+<fullyQualifiedTypeName name="java.lang.Exception"/>
+<fullyQualifiedTypeName name="org.ebulabs.hotspot.XMLProgrammeInfoParser"/>
+<fullyQualifiedTypeName name="java.lang.Math"/>
+<fullyQualifiedTypeName name="org.ebulabs.hotspot.R.id"/>
+<fullyQualifiedTypeName name="android.widget.TextView"/>
+<fullyQualifiedTypeName name="org.ebulabs.hotspot.HotspotApplication"/>
+<fullyQualifiedTypeName name="org.ebulabs.hotspot.R.string"/>
+<fullyQualifiedTypeName name="org.apache.http.client.HttpClient"/>
+<fullyQualifiedTypeName name="org.apache.http.impl.client.DefaultHttpClient"/>
+<fullyQualifiedTypeName name="org.apache.http.message.BasicNameValuePair"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="org.apache.http.NameValuePair"/>
+<fullyQualifiedTypeName name="org.apache.http.client.entity.UrlEncodedFormEntity"/>
+<fullyQualifiedTypeName name="org.apache.http.HttpResponse"/>
+<fullyQualifiedTypeName name="org.ebulabs.hotspot.HotspotException"/>
+<fullyQualifiedTypeName name="android.util.Log"/>
+<fullyQualifiedTypeName name="org.apache.http.client.methods.HttpPost"/>
+<fullyQualifiedTypeName name="android.media.MediaPlayer"/>
+<fullyQualifiedTypeName name="org.ebulabs.hotspot.Utils"/>
+<fullyQualifiedTypeName name="java.util.Map"/>
+<fullyQualifiedTypeName name="java.util.Map.Entry"/>
+<fullyQualifiedTypeName name="java.lang.StringBuilder"/>
 </qualifiedTypeNameHistroy>

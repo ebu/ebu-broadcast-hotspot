@@ -1,0 +1,18 @@
+package org.ebulabs.hotspot;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.Toast;
+
+public class PlayProgrammeActivity extends Activity {
+	
+	private void toast(String t) {
+		Toast.makeText(getApplicationContext(), t, Toast.LENGTH_SHORT).show();
+	}
+	
+	 @Override
+	 public void onCreate(Bundle savedInstanceState) {
+		 TextView v = (TextView)findViewById(R.id.playText);
+	 }
+
+}
