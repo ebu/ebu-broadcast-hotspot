@@ -200,10 +200,10 @@ class DABController(DeviceController):
 
             elif ADAPTER_VLC:
                 vlc_port = om_port + 10000
-                access = "0.0.0.0:{0}".format(vlc_port)
+                access = "0.0.0.0"
 
                 # takes care of protocol details etc...
-                a = OpenMokastVLCAdapter(openmokast_destination, VLC_PROTOCOL, access, "audio")
+                a = OpenMokastVLCAdapter(openmokast_destination, VLC_PROTOCOL, access, vlc_port, "audio", codec="aac")
 
             self._adapters[programme] = a
 
