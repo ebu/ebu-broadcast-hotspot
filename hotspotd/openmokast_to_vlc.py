@@ -32,17 +32,19 @@ class OpenMokastVLCAdapter(object):
     used to stream openmokast to the user device. There is one adapter for each programme.
     """
 
-    def __init__(self, om_access, proto, access, filename, codec=None, ab=None):
+    def __init__(self, om_access, proto, access, port, filename, codec=None, ab=None):
         """Create a new OpenMokastVLCAdapter reading from openmokast on the URL given by 
         om_access, and transcode to proto://access/filename
 
         Example: om_access = "http://localhost:40003"
                  proto = "RTSP"
-                 access = "192.168.1.114:554"
+                 access = "192.168.1.114"
+                 port = 554
                  filename = "foo"
               or
                  proto = "HTTP"
-                 access = "192.168.1.114:8080"
+                 access = "192.168.1.114"
+                 port = 8080
                  filename = "foo"
         Filename does not contain the filename extension, which is chosen by proto and codec
         codec and ab (audiobitrate) are optional
@@ -67,10 +69,11 @@ class OpenMokastVLCAdapter(object):
             fmt = {'access':   access,
                    'filename': filename,
                    'myip':     my_ip,
+                   'port':     port,
                    'ext':      self.audio_params['container']}
 
-            self.vlc_sout_dest = "http{" + "dst={access}/{filename}.{ext}".format(**fmt) + "}"
-            self.url = "http://{myip}/{filename}.{ext}".format(**fmt)
+            self.vlc_sout_dest = "http{" + "dst={access}:{port}/{filename}.{ext}".format(**fmt) + "}"
+            self.url = "http://{myip}:{port}/{filename}.{ext}".format(**fmt)
 
         elif proto == "RTSP":
             self.audio_params['container'] = "sdp"
@@ -80,10 +83,11 @@ class OpenMokastVLCAdapter(object):
                    'access':    access,
                    'filename':  filename,
                    'myip':      my_ip,
+                   'port':     port,
                    'ext':       self.audio_params['container']}
 
-            self.vlc_sout_dest = "rtp{" + "dst={multicast},port={portrange},sdp=rtsp://{access}/{filename}.{ext}".format(**fmt)
-            self.url = "rtsp://{myip}/{filename}.{ext}".format(**fmt)
+            self.vlc_sout_dest = "rtp{" + "dst={multicast},port={portrange},sdp=rtsp://{access}:{port}/{filename}.{ext}".format(**fmt)
+            self.url = "rtsp://{myip}:{port}/{filename}.{ext}".format(**fmt)
         else:
             Log.e("OpenMokast_to_VLC", "ERROR! VLC_PROTOCOL {0} not supported".format(VLC_PROTOCOL))
             import sys

@@ -83,10 +83,15 @@ public class DiscoverHotspot {
 		String ret = null;
 
 		if (this.info != null) {
-
-			String[] urls = info.getURLs();
-			if (urls.length > 0)
-				ret = urls[0];
+			
+			Log.d(Utils.LOGTAG + ".DiscoverHotspot", "Inet4adlist");
+			for (Inet4Address a : info.getInet4Addresses()) {
+				Log.d(Utils.LOGTAG + ".DiscoverHotspot", "Inet4ad " + a.toString());
+			}
+			
+			Inet4Address[] addrs = info.getInet4Addresses();
+			if (addrs.length > 0)
+				ret = "http:/" + addrs[0].toString() + ":" + Integer.toString(info.getPort());
 		}
 
 		return ret;

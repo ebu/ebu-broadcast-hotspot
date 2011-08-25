@@ -48,6 +48,10 @@ public class ChooseTechActivity extends Activity {
         // TODO: do better
         while ((zeroconf_url = dh.getHotspotLocation()) == null) {}
         
+        HotspotApplication app = ((HotspotApplication)getApplication());
+        
+        app.hotspotURL = zeroconf_url;
+        
         Log.i(Utils.LOGTAG + "onCreate choose tech", "URL from mdns " + zeroconf_url);
         
 
@@ -136,7 +140,8 @@ public class ChooseTechActivity extends Activity {
     @Override
     public void onPause() {
     	super.onPause();
-    	this.mcastlock.release();
+    	if (this.mcastlock != null && this.mcastlock.isHeld())
+    		this.mcastlock.release();
     }
     
 }

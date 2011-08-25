@@ -30,10 +30,10 @@ public class ChooseProgrammeActivity extends Activity {
         
         /* Get programme list from daemon */
         
-        Tech activeTech = ((HotspotApplication)getApplication()).activeTech;
+        HotspotApplication app = ((HotspotApplication)getApplication());
         
         URL url;
-        String url_sz = getString(R.string.daemon_url) + "/" + activeTech.name + "/programmes";
+        String url_sz = app.hotspotURL + "/" + app.activeTech.name + "/programmes";
 		try {
 			url = new URL(url_sz);
 		} catch (MalformedURLException e) {
@@ -51,9 +51,10 @@ public class ChooseProgrammeActivity extends Activity {
 					int position, long id) {
 				
 				Log.d(Utils.LOGTAG + "onCreate choose prog", "Click on programme, creating URL for POST");
-				Tech activeTech = ((HotspotApplication)getApplication()).activeTech;
+				
 				URL url;
-				String url_sz = getString(R.string.daemon_url) + "/" + activeTech.name + "/programme";
+				HotspotApplication app = ((HotspotApplication)getApplication());
+				String url_sz = app.hotspotURL + "/" + app.activeTech.name + "/programme";
 				try {
 					url = new URL(url_sz);
 				} catch (MalformedURLException e) {
