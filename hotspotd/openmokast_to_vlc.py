@@ -13,38 +13,16 @@ from misc import *
 # assumes openmokast runs on localhost:
 om_host = "127.0.0.1"
 multicast = "139.10.10.1"
+my_ip = get_ip_address()
 
 Log_src = "OpenMokast->VLC"
 
-audio_params = {
+audio_params_default = {
         "codec_bitrate" : 320,
         "samplerate" : 48000,
         "channels" : 2,
         "codec" : "mp3",
         "container" : "mp3"}
-
-if VLC_PROTOCOL == "HTTP":
-    vlc_url_prefix = "http://"
-    def vlc_destination_cmdline(destination):
-        return "http{" + "dst={0}".format(destination) + "}"
-
-elif VLC_PROTOCOL == "RTSP":
-    vlc_url_prefix = "rtsp://"
-    audio_params['container'] = "sdp"
-    def vlc_destination_cmdline(destination):
-        return "rtp{" + "dst={multicast},port={portrange},sdp=rtsp://{dst}".format(
-                multicast=multicast,
-                portrange="6025-6125",
-                dst=destination) + "}"
-else:
-    Log.e("OpenMokast_to_VLC", "ERROR! VLC_PROTOCOL {0} not supported".format(VLC_PROTOCOL))
-    import sys
-    sys.exit(1)
-
-def get_vlc_args(source, destination):
-    transcode = "vcodec=none,acodec={codec},ab={codec_bitrate},channels={channels},samplerate={samplerate}".format(**audio_params)
-    http = "dst={0}".format(destination)
-    return ["cvlc", source, "--sout", "#transcode{" + transcode + "}:http{" + http + "}"] # TODO RTSP
 
 class OpenMokastVLCAdapter(object):
     """This class implements the following command:
@@ -54,25 +32,77 @@ class OpenMokastVLCAdapter(object):
     used to stream openmokast to the user device. There is one adapter for each programme.
     """
 
-    def __init__(self, om_access, destination):
+    def __init__(self, om_access, proto, access, filename, codec=None, ab=None):
         """Create a new OpenMokastVLCAdapter reading from openmokast on the URL given by 
-        om_access, and transcode to destination
+        om_access, and transcode to proto://access/filename
 
         Example: om_access = "http://localhost:40003"
-                 destination = ":8080/audio.mp3"
+                 proto = "RTSP"
+                 access = "192.168.1.114:554"
+                 filename = "foo"
+              or
+                 proto = "HTTP"
+                 access = "192.168.1.114:8080"
+                 filename = "foo"
+        Filename does not contain the filename extension, which is chosen by proto and codec
+        codec and ab (audiobitrate) are optional
         """
-
         Log.d(Log_src, "init")
+
+        self.audio_params = audio_params_default
+
+        if codec is not None:
+            self.audio_params['codec'] = codec
+        if ab is not None:
+            self.audio_params['codec_bitrate'] = ab
+
+        if proto == "HTTP":
+
+            #TODO consider other codecs
+            if codec == "vorb":
+                self.audio_params['container'] = "ogg"
+            else:
+                self.audio_params['container'] = self.audio_params['codec'] # works for mp3, aac, but not OGG Vorbis
+
+            fmt = {'access':   access,
+                   'filename': filename,
+                   'myip':     my_ip,
+                   'ext':      self.audio_params['container']}
+
+            self.vlc_sout_dest = "http{" + "dst={access}/{filename}.{ext}".format(**fmt) + "}"
+            self.url = "http://{myip}/{filename}.{ext}".format(**fmt)
+
+        elif proto == "RTSP":
+            self.audio_params['container'] = "sdp"
+
+            fmt = {'multicast': multicast,
+                   'portrange': "6025-6125",
+                   'access':    access,
+                   'filename':  filename,
+                   'myip':      my_ip,
+                   'ext':       self.audio_params['container']}
+
+            self.vlc_sout_dest = "rtp{" + "dst={multicast},port={portrange},sdp=rtsp://{access}/{filename}.{ext}".format(**fmt)
+            self.url = "rtsp://{myip}/{filename}.{ext}".format(**fmt)
+        else:
+            Log.e("OpenMokast_to_VLC", "ERROR! VLC_PROTOCOL {0} not supported".format(VLC_PROTOCOL))
+            import sys
+            sys.exit(1)
+
         self.om_access = om_access
-        self.destination = destination
 
         self.vlc = None
 
         self.ready = True
         self.running = False
 
+    def get_vlc_args(self):
+        transcode = "vcodec=none,acodec={codec},ab={codec_bitrate},channels={channels},samplerate={samplerate}".format(
+                **self.audio_params)
+        return ["cvlc", self.om_access, "--sout", "#transcode{" + transcode + "}:" + self.vlc_sout_dest]
+
     def __str__(self):
-        return "<OM-VLC Adapter: {0} -> {1} [{2}]>".format(self.om_access, self.destination, "ready" if self.ready else "stopped")
+        return "<OM-VLC Adapter: {0} -> {1} [{2}]>".format(self.om_access, self.url, "ready" if self.ready else "stopped")
 
     def _destroy(self):
         Log.d(Log_src, "destroying {0}".format(self))
@@ -106,7 +136,7 @@ class OpenMokastVLCAdapter(object):
         self._destroy()
 
     def get_url(self):
-        return vlc_url_prefix + self.destination
+        return self.url
 
     def start(self):
         """Start VLC.
@@ -136,7 +166,7 @@ class OpenMokastVLCAdapter(object):
         self.running = True
 
     def prepare_vlc(self):
-        args = get_vlc_args(self.om_access, self.destination)
+        args = self.get_vlc_args()
         Log.d(Log_src, "prepare vlc\n{0}".format(args))
         self.vlc = subprocess.Popen(args)
 
@@ -144,21 +174,22 @@ if __name__ == "__main__":
     def p(m):
         print(Colour.GREEN + "================" + m + Colour.ENDC)
 
-    p("TEST")
+    p("http")
+    adapt_http = OpenMokastVLCAdapter("http://localhost:40003", "HTTP", "0.0.0.0:8080", "audio")
 
-    adapt = OpenMokastVLCAdapter("http://localhost:40003", ":8080/audio.mp3")
+    print(adapt_http)
+    print(" ".join(adapt_http.get_vlc_args()))
+
+    p("http w/ aac")
+    adapt_http = OpenMokastVLCAdapter("http://localhost:40003", "HTTP", "0.0.0.0:8080", "audio", codec="aac", ab=128)
+
+    print(adapt_http)
+    print(" ".join(adapt_http.get_vlc_args()))
     
-    p("START")
-    adapt.start()
+    p("rtsp")
+    adapt_rtsp = OpenMokastVLCAdapter("http://localhost:40003", "RTSP", "0.0.0.0:554", "audio")
 
-    try:
-        p("SLEEPING 60 SECS")
-        time.sleep(60)
-    except KeyboardInterrupt:
-        pass
-
-    p("STOPPING")
-    adapt.stop()
-
-    p("DONE")
-
+    print(adapt_rtsp)
+    print(" ".join(adapt_rtsp.get_vlc_args()))
+    
+    

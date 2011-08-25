@@ -14,7 +14,7 @@ from misc import *
 # assumes openmokast runs on localhost:
 om_host = "127.0.0.1"
 
-icecast_ip = myip
+icecast_ip = get_ip_address()
 icecast_port = "8000"
 
 BUFSIZE = 4096

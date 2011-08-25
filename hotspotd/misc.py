@@ -1,5 +1,10 @@
 from xml.etree import ElementTree as ET
 
+# for get_ip_address
+import socket
+import fcntl
+import struct
+
 VERSION = "0.1"
 
 HOTSPOT_PORT = 8080
@@ -15,15 +20,13 @@ ADAPTER_VLC = True
 
 # Select what protocol VLC uses to stream to android
 # Valid choices: HTTP, RTSP
-VLC_PROTOCOL = "HTTP"
+VLC_PROTOCOL = "RTSP"
 
 # Service publishing through Avahi (Zeroconf)
 avahi_service_name = "EBU Broadcast Hotspot"
 avahi_service_type = "_bhcp._tcp" # Broadcast Hotspot Control Protocol. Sounds nice, doesn't it ?
 avahi_service_port = HOTSPOT_PORT
 avahi_service_TXT = "EBU Broadcast Hostpot Daemon" #TXT record for the service
-
-myip = "192.168.1.114"
 
 xml_prolog = '<?xml version="1.0" encoding="utf-8" ?>'
 
@@ -50,6 +53,18 @@ def capabilities(techlist):
                 freq_el.text = str(f)
     
     return xml_prolog + ET.tostring(root, encoding="utf-8")
+
+def get_ip_address():
+    ifname = "eth0"
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    # get ip address corresponding to that interface
+    return socket.inet_ntoa(fcntl.ioctl(
+        s.fileno(),
+        0x8915,  # SIOCGIFADDR
+        struct.pack('256s', ifname[:15])
+    )[20:24])
 
 class Colour:
     PURPLE = '\033[95m'
