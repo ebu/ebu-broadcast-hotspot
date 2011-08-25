@@ -10,7 +10,7 @@
 
 from openmokast_dbus_remote import *
 from openmokast_to_icecast import OpenMokastIceCastAdapter
-from openmokast_to_vlc import OpenMokastVLCAdapter, audio_params
+from openmokast_to_vlc import OpenMokastVLCAdapter
 from xml.etree import ElementTree as ET
 from urlparse import urlparse
 import time
@@ -200,11 +200,10 @@ class DABController(DeviceController):
 
             elif ADAPTER_VLC:
                 vlc_port = om_port + 10000
+                access = "0.0.0.0:{0}".format(vlc_port)
 
-                # http:// is implicit
-                dest = "{ip}:{port}/audio.{ext}".format(ip=myip, port=vlc_port, ext=audio_params['container'])
-
-                a = OpenMokastVLCAdapter(openmokast_destination, dest)
+                # takes care of protocol details etc...
+                a = OpenMokastVLCAdapter(openmokast_destination, VLC_PROTOCOL, access, "audio")
 
             self._adapters[programme] = a
 
