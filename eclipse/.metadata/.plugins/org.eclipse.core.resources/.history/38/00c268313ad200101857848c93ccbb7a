@@ -1,0 +1,110 @@
+package org.ebulabs.radiodns;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.nio.CharBuffer;
+
+import android.util.Log;
+
+import com.sun.xml.internal.stream.buffer.stax.StreamReaderBufferCreator;
+
+public class RadioVisDAB {
+	
+	RadioDNS visserver;
+	StompConnectionHandler stomp;
+	String topic;
+	
+	/**
+	 * Create a new RadioVisDAB instance.
+	 * 
+	 * All parameters are hexadecimal strings (without "0x" prefix)
+	 * 
+	 * @param ECC Extended Country Code
+	 * @param EId Ensemble Id
+	 * @param SId Service Id
+	 * @param SubCHId Subchannel Id
+	 * @throws RadioDNSException 
+	 */
+	public RadioVisDAB(String ECC, String EId, String SId, String SubCHId, RadioVisCallbacks callbacks) throws RadioDNSException {
+		this.visserver = new RadioDNS(SubCHId + "." + SId + "." + EId + "." + ECC);
+		
+		this.topic = "/topic/dab/" + ECC + "/" + EId + "/" + SId + "/" + SubCHId;
+		
+		this.stomp = new StompConnectionHandler(visserver.getServer(), visserver.getPort(), callbacks, this.topic);
+	}
+}
+
+class StompConnectionHandler extends Thread {
+	Socket sock;
+	RadioVisCallbacks callbacks;
+	String topic;
+	String server;
+	int port;
+	
+	boolean run;
+	
+	Exception lastError;
+	
+	public StompConnectionHandler(String server, int port, RadioVisCallbacks callbacks, String topic) throws RadioDNSException {
+		this.callbacks = callbacks;
+		this.topic = topic;
+		this.server = server;
+		this.port = port;
+		this.run = true;
+	}
+	
+	@Override
+	public void run() {
+		
+		try {
+			sock = new Socket(server, port);
+			PrintStream out = new PrintStream(sock.getOutputStream());
+			InputStreamReader in = new InputStreamReader(sock.getInputStream());
+			
+			out.print("CONNECT\n\n\0");
+			String r[] = receiveMessage(in).split("\n");
+			
+			if (r.length == 0 || !r[0].equals("CONNECTED")) {
+				Log.e("RadioDNS", "Could not connect");
+				throw new RadioDNSException("Did not receive correct answer from server");
+			}
+			
+			out.print("SUBSCRIBE\ndestination: " + this.topic + "\nack: auto\n\n\0");
+			
+			
+
+			
+			
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+			
+			this.lastError = new RadioDNSException(e);
+		}
+		
+		
+	}
+	
+	String receiveMessage(InputStreamReader in) throws RadioDNSException {
+		StringBuilder sb = new StringBuilder();
+		
+		char[] c = new char[1];
+		
+		try {
+			while (in.read(c) != -1) {
+				if (c[0] == '\0')
+					break;
+				sb.append(c[0]);
+			}
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			Log.e("RadioDNS", "receiveToken failed");
+			throw new RadioDNSException(e);
+		}
+		
+		return sb.toString();
+	}
+}

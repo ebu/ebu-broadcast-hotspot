@@ -1,23 +1,23 @@
 package org.ebulabs.hotspot;
 
-import java.io.IOException;
 import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 import javax.jmdns.*;
-import javax.jmdns.impl.*;
-
 import android.util.Log;
+
+interface HotspotDiscoveredCallback {
+	public void foundHotspotAt(String URL);
+}
 
 /** Finds the hotspot using Zeroconf */
 public class DiscoverHotspot {
 	
 	ServiceInfo info;
+	HotspotDiscoveredCallback requester;
 	
-	public DiscoverHotspot() {
-		
+	public DiscoverHotspot(HotspotDiscoveredCallback requester) {
 		Log.e(Utils.LOGTAG + ".DiscoverHotspot", "start");
+		
+		this.requester = requester;
 		
 		class HotspotListener implements ServiceListener
 		{
@@ -38,18 +38,17 @@ public class DiscoverHotspot {
 				Log.d(Utils.LOGTAG + ".DiscoverHotspot", event.getInfo().getServer());
 				Log.d(Utils.LOGTAG + ".DiscoverHotspot", Integer.toString(event.getInfo().getPort()));
 				
-				saveHotspotLocation(event.getInfo());
+				saveAndNotifyHotspotLocation(event.getInfo());
 			}
 		}
 
 		JmDNS jmdns;
 		
 		try {
-			
-			
 			jmdns = JmDNS.create();
+			Log.d(Utils.LOGTAG + ".DiscoverHotspot", "jmdns bound to " + jmdns.getInterface().toString());
 			
-			ServiceInfo info = jmdns.getServiceInfo("_bhcp._tcp.local.", "EBU Broadcast Hotspot", 1000);
+			ServiceInfo info = jmdns.getServiceInfo("_bhcp._tcp.local.", "EBU_Broadcast_Hotspot", 5000);
 			
 			
 			if (info != null) {
@@ -61,7 +60,9 @@ public class DiscoverHotspot {
 				}
 				Log.d(Utils.LOGTAG + ".DiscoverHotspot", info.getServer());
 				Log.d(Utils.LOGTAG + ".DiscoverHotspot", Integer.toString(info.getPort()));
-				saveHotspotLocation(info);
+				saveAndNotifyHotspotLocation(info);
+				
+				
 			} else {
 				Log.e(Utils.LOGTAG + ".DiscoverHotspot", "No mDNS response");
 			} 
@@ -75,8 +76,12 @@ public class DiscoverHotspot {
 		
 	}
 	
-	private void saveHotspotLocation(ServiceInfo info) {
+	private void saveAndNotifyHotspotLocation(ServiceInfo info) {
 		this.info = info;
+		String loc = getHotspotLocation();
+		Log.d(Utils.LOGTAG + ".DiscoverHotspot", "got location " + loc);
+		if (loc != null)
+			this.requester.foundHotspotAt(loc);
 	}
 
 	public String getHotspotLocation() {

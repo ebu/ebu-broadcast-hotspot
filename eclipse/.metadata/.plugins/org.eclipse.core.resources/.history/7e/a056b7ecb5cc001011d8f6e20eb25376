@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="hello">Please choose RX technology</string>
-    <string name="app_name">EBU Broadcasting Hotspot</string>
-    <string name="daemon_url">http://192.168.1.114:8080/hotspot</string>
-    <string name="choose_programme">Please choose the programme</string>
-    <string name="intent_chose_programme">org.ebulabs.hotspot.CHOOSE_PROGRAMME</string>
-    <string name="intent_play_programme">org.ebulabs.hotspot.PLAY_PROGRAMME</string>
-</resources>

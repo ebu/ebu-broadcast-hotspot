@@ -1,0 +1,6 @@
+package org.ebulabs.medialab.player;
+
+public interface RadioVisCallbacks {
+	public void newSHOW(String Url);
+	public void newTEXT(String Text);
+}

@@ -6,9 +6,16 @@ public class HotspotException extends Exception {
 	
 	private Exception inner;
 	
-	public HotspotException() {}
+	public HotspotException() {
+		super();
+	}
+	
+	public HotspotException(String detailMessage) {
+		super(detailMessage);
+	}
 	
 	public HotspotException(Exception inner) {
+		super();
 		this.inner = inner;
 	}
 

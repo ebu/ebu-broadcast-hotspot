@@ -1,0 +1,117 @@
+package org.ebulabs.hotspot;
+
+import java.util.Map;
+
+import org.ebulabs.radiodns.RadioDNS;
+import org.ebulabs.radiodns.RadioDNSException;
+import org.ebulabs.radiodns.RadioVisCallbacks;
+import org.ebulabs.radiodns.RadioVisDAB;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.media.MediaPlayer;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class PlayProgrammeActivity extends Activity implements RadioVisCallbacks {
+	
+	private MediaPlayer mediaPlayer;
+	private ProgressDialog pd;
+
+	private void toast(String t) {
+		Toast.makeText(getApplicationContext(), t, Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		 pd = new ProgressDialog(this);
+	     pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+	     pd.setMessage("Connecting to programme");
+	     
+	     
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		
+		pd.show();
+
+		setContentView(R.layout.playprogramme);
+		TextView v = (TextView)findViewById(R.id.playText);
+		HotspotApplication app = (HotspotApplication)getApplication();
+
+		if (app.pi == null) {
+			toast("App.pi is null !");
+			Log.e(Utils.LOGTAG + "PlayProgrammeActivity", "app.pi null");
+			return;
+		}
+		
+		setupRadioVis(app.pi);
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(app.pi.name + "\n" + app.pi.url + "\n\n");
+		Map<String,String> info = app.pi.getInfo();
+
+		for (Map.Entry<String, String> e : info.entrySet()) {
+			sb.append(e.getKey() + ": " + e.getValue() + "\n");
+		}
+		
+		v.setText(sb.toString());
+				
+		this.mediaPlayer = new MediaPlayer();
+		try {
+			Log.d(Utils.LOGTAG + "PlayProgrammeActivity", "startAudioStream");
+			Utils.startAudioStream(this.mediaPlayer, app.pi.url);
+		} catch (HotspotException e) {
+			toast("App.pi is null !");
+		
+		}
+		pd.dismiss();
+	}
+	
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		Utils.stopAudioStream(this.mediaPlayer);
+		this.mediaPlayer.release();
+	}
+
+	void setupRadioVis(ProgrammeInfo pi) throws RadioDNSException {
+		String eid_dec = pi.getInfo().get("eid");
+		String sid_dec = pi.getInfo().get("sid");
+		String subchid_dec = pi.getInfo().get("subchid");
+		
+		if (eid_dec == null || sid_dec == null || subchid_dec == null) {
+			toast("Incomplete Programme information !");
+			throw new RadioDNSException("Incomplete Programme information !");
+		}
+		
+		String ECC = "4e1"; //TODO menu entry somewhere !
+		String EId = Integer.toHexString(Integer.parseInt(eid_dec));
+		String SId = Integer.toHexString(Integer.parseInt(sid_dec));
+		String SubCHId = Integer.toHexString(Integer.parseInt(subchid_dec));
+		
+		RadioVisDAB radioVis = new RadioVisDAB(ECC, EId, SId, SubCHId, this);
+		radioVis.start();
+		
+	}
+
+	@Override
+	public void newSHOW(String Url) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void newTEXT(String Text) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}
