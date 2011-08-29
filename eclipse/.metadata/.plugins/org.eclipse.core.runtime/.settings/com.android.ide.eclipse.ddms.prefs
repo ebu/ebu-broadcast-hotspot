@@ -1,4 +1,4 @@
-#Tue Aug 23 15:50:29 CEST 2011
+#Mon Aug 29 17:34:13 CEST 2011
 threadPanel.stack.col0=139
 emulatorControl.waypoint.desc=116
 emulatorControl.track.first=145
@@ -7,7 +7,7 @@ emulatorControl.waypoint.elevation=62
 com.android.ide.eclipse.ddms.explorer.permissions=84
 com.android.ide.eclipse.ddms.explorer.time=46
 com.android.ide.eclipse.ddms.logcat.filters=ebulabs\:2\:*ebulabs*|
-com.android.ide.eclipse.ddms.logcat.time=122
+com.android.ide.eclipse.ddms.logcat.time=136
 com.android.ide.eclipse.ddms.explorer.info=419
 com.android.ide.eclipse.ddms.explorer.data=82
 com.android.ide.eclipse.ddms.logcat.level=18
@@ -26,7 +26,7 @@ allocPanel.Col2=34
 com.android.ide.eclipse.ddms.explorer.size=58
 allocPanel.Col1=99
 allocPanel.Col0=34
-com.android.ide.eclipse.ddms.logcat.tag=333
+com.android.ide.eclipse.ddms.logcat.tag=208
 eclipse.preferences.version=1
 com.android.ide.eclipse.ddms.logcatFont=1|Inconsolata|10.0|0|GTK|1|;
 heapPanel.col6=235
@@ -45,7 +45,7 @@ devicePanel.Col1=49
 heapPanel.col1=54
 threadPanel.Col0=34
 com.android.ide.eclipse.ddms.explorer.name=194
-devicePanel.Col0=177
+devicePanel.Col0=206
 heapPanel.col0=224
 emulatorControl.track.name=142
 emulatorControl.track.comment=90

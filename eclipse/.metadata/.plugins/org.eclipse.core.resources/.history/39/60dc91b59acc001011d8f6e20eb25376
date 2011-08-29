@@ -1,8 +1,0 @@
-package org.ebulabs.hotspot;
-
-public class ProgrammeInfo {
-	
-	public String name;
-	public String url;
-
-}

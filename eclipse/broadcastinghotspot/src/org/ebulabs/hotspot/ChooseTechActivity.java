@@ -1,15 +1,27 @@
 package org.ebulabs.hotspot;
 
 import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.UnknownHostException;
+import java.sql.Driver;
 import java.util.ArrayList;
 
+import org.apache.http.conn.util.InetAddressUtils;
+
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,9 +31,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class ChooseTechActivity extends Activity {
+public class ChooseTechActivity extends Activity implements HotspotDiscoveredCallback{
 	
 	android.net.wifi.WifiManager.MulticastLock mcastlock;
+	DiscoverHotspot dh;
+	ProgressDialog pd;
+	
 	
 	private void toast(String t) {
 		Toast.makeText(getApplicationContext(), t, Toast.LENGTH_SHORT).show();
@@ -40,17 +55,59 @@ public class ChooseTechActivity extends Activity {
         
         mcastlock = wifi.createMulticastLock("HotspotDnsSDLock");
         mcastlock.setReferenceCounted(true);
-        mcastlock.acquire();
         
-        DiscoverHotspot dh = new DiscoverHotspot();
-        String zeroconf_url;
+    }
+    
+    
+    @Override
+    public void onPause() {
+    	super.onPause();
+    	Log.d(Utils.LOGTAG + "onPause", "releasing mcastlock if held");
+    	if (this.mcastlock.isHeld())
+    		this.mcastlock.release();
+    }
+    
+    @Override
+    public void onResume() {
+    	super.onResume();
+    	Log.d(Utils.LOGTAG + "onResume", "acquiring mcastlock");
+    	this.mcastlock.acquire();
+ 
+    	Context context = getApplicationContext();
+        WifiManager wm = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
+    	WifiInfo wifiInfo = wm.getConnectionInfo();
+    	
+    	String ip = Formatter.formatIpAddress(wifiInfo.getIpAddress());
+    	Log.d(Utils.LOGTAG + ".ChooseTechActivity", "IP address is " + ip); 
+    	
+        pd = new ProgressDialog(this);
+        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        pd.setMessage("Trying to find Hotspot");
         
-        // TODO: do better
-        while ((zeroconf_url = dh.getHotspotLocation()) == null) {}
+        //pd.show();
+        
+        //this.dh = new DiscoverHotspot(this);
+        this.foundHotspotAt("http://192.168.1.114:8080");
+    }
+
+    /** Gets called when DiscoverHotspot received the URL through Zeroconf */
+	@Override
+	public void foundHotspotAt(String zeroconf_url) {
+		Log.d(Utils.LOGTAG + "foundHotspotAt", "called with url " + zeroconf_url);
+		
+		HotspotApplication app = ((HotspotApplication)getApplication());
+        if (app.hotspotURL == null) {
+        	app.hotspotURL = zeroconf_url;
+        	pd.dismiss();
+        	initialiseOnce();
+        }
+        
+	}
+	
+	void initialiseOnce() {
         
         HotspotApplication app = ((HotspotApplication)getApplication());
-        
-        app.hotspotURL = zeroconf_url;
+        String zeroconf_url = app.hotspotURL;
         
         Log.i(Utils.LOGTAG + "onCreate choose tech", "URL from mdns " + zeroconf_url);
         
@@ -134,14 +191,7 @@ public class ChooseTechActivity extends Activity {
 			toast("IO Exception");
 			e.printStackTrace();
 			return;
-		}
-    }
-    
-    @Override
-    public void onPause() {
-    	super.onPause();
-    	if (this.mcastlock != null && this.mcastlock.isHeld())
-    		this.mcastlock.release();
-    }
+		}		
+	}
     
 }

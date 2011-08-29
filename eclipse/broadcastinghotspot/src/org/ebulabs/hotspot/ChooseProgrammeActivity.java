@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,8 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class ChooseProgrammeActivity extends Activity {
 	
+	ProgressDialog pd;
+	
 	private void toast(String t) {
 		Toast.makeText(getApplicationContext(), t, Toast.LENGTH_SHORT).show();
 	}
@@ -27,6 +30,10 @@ public class ChooseProgrammeActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.programmechoice);
+        
+        pd = new ProgressDialog(this);
+        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        pd.setMessage("Connecting to programme");
         
         /* Get programme list from daemon */
         
@@ -51,6 +58,8 @@ public class ChooseProgrammeActivity extends Activity {
 					int position, long id) {
 				
 				Log.d(Utils.LOGTAG + "onCreate choose prog", "Click on programme, creating URL for POST");
+				
+		        pd.show();
 				
 				URL url;
 				HotspotApplication app = ((HotspotApplication)getApplication());
@@ -100,6 +109,7 @@ public class ChooseProgrammeActivity extends Activity {
 						
 						startActivity(new Intent("org.ebulabs.hotspot.PLAY_PROGRAMME"));
 						
+						
 					} catch (HotspotException e) {
 						e.printStackTrace();
 						toast("Parsing XML Info failed");
@@ -113,7 +123,6 @@ public class ChooseProgrammeActivity extends Activity {
 				}
 			}
 		});
-
 		
         URLConnection conn;
 		try {
@@ -150,4 +159,10 @@ public class ChooseProgrammeActivity extends Activity {
 			return;
 		}
     }
+
+    @Override
+	protected	void onPause() {
+    	super.onPause();
+		pd.dismiss();
+	}
 }

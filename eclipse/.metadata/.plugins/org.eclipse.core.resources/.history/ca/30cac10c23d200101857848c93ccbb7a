@@ -1,0 +1,18 @@
+package org.ebulabs.radiodns;
+
+public class RadioDNSException  extends Exception {
+	private static final long serialVersionUID = -1427377500294846598L;
+	
+	private Exception inner;
+
+	public RadioDNSException() {}
+
+	public RadioDNSException(Exception inner) {
+		this.inner = inner;
+	}
+
+	public Exception getInnerException() {
+		return this.inner;
+	}
+
+}
