@@ -86,7 +86,7 @@ class OpenMokastVLCAdapter(object):
                    'port':     port,
                    'ext':       self.audio_params['container']}
 
-            self.vlc_sout_dest = "rtp{" + "dst={multicast},port={portrange},sdp=rtsp://{access}:{port}/{filename}.{ext}".format(**fmt)
+            self.vlc_sout_dest = "rtp{" + "dst={multicast},port={portrange},sdp=rtsp://{myip}:{port}/{filename}.{ext}".format(**fmt) + "}"
             self.url = "rtsp://{myip}:{port}/{filename}.{ext}".format(**fmt)
         else:
             Log.e("OpenMokast_to_VLC", "ERROR! VLC_PROTOCOL {0} not supported".format(VLC_PROTOCOL))

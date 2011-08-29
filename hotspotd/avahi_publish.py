@@ -54,7 +54,7 @@ class AvahiPublisherThread(threading.Thread):
 
         self.group.AddService(
                 avahi.IF_UNSPEC,    #interface
-                avahi.PROTO_UNSPEC, #protocol
+                avahi.PROTO_INET, #protocol
                 dbus.UInt32(0),                  #flags
                 avahi_service_name, avahi_service_type,
                 domain, host,
