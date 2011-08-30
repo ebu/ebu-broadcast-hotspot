@@ -37,7 +37,7 @@ help_message_header = '\n'.join([
         '<img src="http://www.ebulabs.org/radiovismanager/img/ebulogo.png" border=0 style="float:left; padding-right:30px;">',
         '</a>',
         '<h1>EBU Broadcast Hotspot</h1>',
-        '<p><b>Debugging acces through browser</b></p>',
+        '<p><b>Debugging access through browser</b></p>',
         '<p>This hotspot can be controlled with the <i>EBU BC Hotspot</i> android application.</p>',
         '<p>Please refer to <a href="http://www.ebulabs.org">ebulabs.org</a> for more details.</p>',
         '<h2>Technology independant</h2>',
