@@ -1,0 +1,12 @@
+To start the hotspot:
+
+- create a GNU Screen session with:
+  dbus-launch screen
+
+Then, inside Screen:
+
+- start openmokast
+  either with -c -e /some/path/example.eti
+  or with     -c -M
+
+- then start hotspotd.py
