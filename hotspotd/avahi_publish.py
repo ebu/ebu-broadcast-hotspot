@@ -8,7 +8,6 @@ from misc import *
 domain = "" # Domain to publish on, default to .local
 host = "" # Host to publish records for, default to localhost
 
-rename_count = 12 # Counter so we only rename after collisions a sensible number of times
 
 log_src = "AvahiPublish"
 
@@ -16,6 +15,8 @@ class AvahiPublisherThread(threading.Thread):
     def run(self):
         Log.i(log_src, "Starting Avahi Publisher")
         self.group = None
+        self.name = avahi_service_name
+        self.rename_count = 12 # Counter so we only rename after collisions a sensible number of times
 
         ml = DBusGMainLoop(set_as_default=False)
         self.main_loop = gobject.MainLoop()
@@ -50,13 +51,13 @@ class AvahiPublisherThread(threading.Thread):
                     avahi.DBUS_INTERFACE_ENTRY_GROUP)
             self.group.connect_to_signal('StateChanged', self.entry_group_state_changed)
 
-        Log.d(log_src, "Adding service '{0}' of type '{1}' ...".format(avahi_service_name, avahi_service_type))
+        Log.d(log_src, "Adding service '{0}' of type '{1}' ...".format(self.name, avahi_service_type))
 
         self.group.AddService(
                 avahi.IF_UNSPEC,    #interface
                 avahi.PROTO_INET, #protocol
                 dbus.UInt32(0),                  #flags
-                avahi_service_name, avahi_service_type,
+                self.name, avahi_service_type,
                 domain, host,
                 dbus.UInt16(avahi_service_port),
                 avahi.string_array_to_txt_array([avahi_service_TXT]))
@@ -64,7 +65,7 @@ class AvahiPublisherThread(threading.Thread):
 
     def remove_service(self):
         if self.group is not None:
-            group.Reset()
+            self.group.Reset()
 
     def server_state_changed(self, state):
         if state == avahi.SERVER_COLLISION:
@@ -81,15 +82,15 @@ class AvahiPublisherThread(threading.Thread):
             Log.d(log_src, "Service established.")
 
         elif state == avahi.ENTRY_GROUP_COLLISION:
-            rename_count = rename_count - 1
-            if rename_count > 0:
-                name = server.GetAlternativeServiceName(name)
-                Log.w(log_src, "WARNING: Service name collision, changing name to '{0}' ...".format(name))
-                remove_service()
-                add_service()
+            self.rename_count = self.rename_count - 1
+            if self.rename_count > 0:
+                self.name = self.server.GetAlternativeServiceName(self.name)
+                Log.w(log_src, "WARNING: Service name collision, changing name to '{0}' ...".format(self.name))
+                self.remove_service()
+                self.add_service()
 
             else:
-                Log.e(log_src, "ERROR: No suitable service name found after {0} retries, exiting.".format(n_rename))
+                Log.e(log_src, "ERROR: No suitable service name found after {0} retries, exiting.".format(12))
 
         elif state == avahi.ENTRY_GROUP_FAILURE:
             Log.e(log_src, "Error in group state changed {0}".format(error))
