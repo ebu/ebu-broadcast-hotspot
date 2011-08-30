@@ -1,3 +1,9 @@
+/*
+Copyright (C) 2011 European Broadcasting Union
+http://www.ebulabs.org
+
+see LICENCE file information.
+*/
 package org.ebulabs.hotspot;
 
 import java.util.ArrayList;
@@ -16,6 +22,11 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.util.Log;
 
+/**
+ * Some utility functions used by all activities
+ * @author mpb
+ *
+ */
 public class Utils {
 
 	public static final String LOGTAG = "org.ebulabs.hotspot."; 

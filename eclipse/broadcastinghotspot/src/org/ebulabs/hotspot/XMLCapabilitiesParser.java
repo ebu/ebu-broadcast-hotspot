@@ -1,5 +1,10 @@
-package org.ebulabs.hotspot;
+/*
+Copyright (C) 2011 European Broadcasting Union
+http://www.ebulabs.org
 
+see LICENCE file information.
+*/
+package org.ebulabs.hotspot;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -12,6 +17,11 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import android.util.Log;
 
+/**
+ * Parser for the capabilities XML
+ * @author mpb
+ *
+ */
 class CapabilitiesHandler extends DefaultHandler {
 	
 	ArrayList<Tech> techs;
@@ -95,7 +105,6 @@ public class XMLCapabilitiesParser {
 		SAXParser sp;
 		try {
 			sp = spf.newSAXParser();
-		
 		
 			XMLReader xr  = sp.getXMLReader();
 			

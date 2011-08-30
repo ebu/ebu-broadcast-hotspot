@@ -1,14 +1,21 @@
+/*
+Copyright (C) 2011 European Broadcasting Union
+http://www.ebulabs.org
+
+see LICENCE file information.
+*/
 package org.ebulabs.radiodns;
 
-import org.ebulabs.hotspot.HotspotException;
-import org.xbill.DNS.CNAMERecord;
-import org.xbill.DNS.Lookup;
-import org.xbill.DNS.Record;
-import org.xbill.DNS.SRVRecord;
-import org.xbill.DNS.Type;
+import org.xbill.DNS.*;
 
 import android.util.Log;
 
+/**
+ * Class to do a DNS request for RadioDNS
+ * @author barroco
+ * @author mpb
+ *
+ */
 public class RadioDNS {
 	
 	static final String LOG_SRC = "RadioDNS";

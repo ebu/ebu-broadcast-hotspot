@@ -1,16 +1,28 @@
+/*
+Copyright (C) 2011 European Broadcasting Union
+http://www.ebulabs.org
+
+see LICENCE file information.
+*/
 package org.ebulabs.radiodns;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.nio.CharBuffer;
 import java.util.HashMap;
 
 import android.util.Log;
 
-import com.sun.xml.internal.stream.buffer.stax.StreamReaderBufferCreator;
-
+/**
+ * Radiovis for DAB.
+ * 
+ * Creates the DNS request, connects to the correct STOMP server, and calls the callback
+ * functions when new messages arrive.
+ * 
+ * @author mpb
+ *
+ */
 public class RadioVisDAB {
 	
 	RadioDNS visserver;
@@ -98,7 +110,7 @@ class StompConnectionHandler extends Thread {
 					callbacks.newSHOW(msg.body.substring("SHOW ".length()));
 				}
 			}
-			
+			Log.i("RadioDNS", "Leaving main loop");
 			sock.close();
 			
 		} 
@@ -112,7 +124,8 @@ class StompConnectionHandler extends Thread {
 	public void stopReceiver() {
 		synchronized (this) {
 			try {
-				sock.close();
+				if (sock != null)
+					sock.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

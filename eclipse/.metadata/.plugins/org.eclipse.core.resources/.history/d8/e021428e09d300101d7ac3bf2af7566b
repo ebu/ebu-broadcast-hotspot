@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Please choose RX technology</string>
+    <string name="app_name">EBU BC Hotspot</string>
+    <string name="choose_programme">Please choose the programme</string>
+    <string name="app_title">EBU Broadcasting Hotspot</string>
+    <string name="default_url">http://192.168.1.114:8080</string>
+    <string name="default_ecc">4e1</string>
+</resources>

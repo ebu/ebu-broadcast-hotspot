@@ -1,3 +1,9 @@
+/*
+Copyright (C) 2011 European Broadcasting Union
+http://www.ebulabs.org
+
+see LICENCE file information.
+*/
 package org.ebulabs.radiodns;
 
 public class RadioDNSException extends Exception {

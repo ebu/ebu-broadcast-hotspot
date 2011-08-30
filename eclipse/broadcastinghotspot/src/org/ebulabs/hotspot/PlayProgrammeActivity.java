@@ -1,7 +1,12 @@
+/*
+Copyright (C) 2011 European Broadcasting Union
+http://www.ebulabs.org
+
+see LICENCE file information.
+*/
 package org.ebulabs.hotspot;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.*;
 import java.util.Map;
 import org.ebulabs.radiodns.*;
@@ -16,6 +21,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * This activity plays the audio chosen, and shows the RadioVIS picture.
+ * @author mpb
+ *
+ */
 public class PlayProgrammeActivity extends Activity implements RadioVisCallbacks {
 	
 	private MediaPlayer mediaPlayer;
@@ -42,6 +52,7 @@ public class PlayProgrammeActivity extends Activity implements RadioVisCallbacks
 		
 		pd.show();
 
+		// Show some stuff on the textview
 		setContentView(R.layout.playprogramme);
 		TextView v = (TextView)findViewById(R.id.playText);
 		HotspotApplication app = (HotspotApplication)getApplication();
@@ -68,30 +79,44 @@ public class PlayProgrammeActivity extends Activity implements RadioVisCallbacks
 		}
 		
 		v.setText(sb.toString());
-				
-		this.mediaPlayer = new MediaPlayer();
-		/*TODO enable
-		try {
-			Log.d(Utils.LOGTAG + "PlayProgrammeActivity", "startAudioStream");
-			
-			//Utils.startAudioStream(this.mediaPlayer, app.pi.url);
-		} catch (HotspotException e) {
-			toast("App.pi is null !");
 		
-		}*/
+		
+		
+		// Then start the player if required.
+				
+		if (app.enableAudio) {
+			this.mediaPlayer = new MediaPlayer();
+			
+			try {
+				Log.d(Utils.LOGTAG + "PlayProgrammeActivity", "startAudioStream");
+				
+				Utils.startAudioStream(this.mediaPlayer, app.pi.url);
+			} catch (HotspotException e) {
+				toast("startAudioStream failed !");	
+			}
+		}
 		pd.dismiss();
 	}
 	
+	/* Stop the player when leaving the activity */
 	@Override
 	public void onPause()
 	{
 		super.onPause();
-		Utils.stopAudioStream(this.mediaPlayer);
-		this.mediaPlayer.release();
+		if (this.mediaPlayer != null) {
+			Utils.stopAudioStream(this.mediaPlayer);
+			this.mediaPlayer.release();
+		}
 		if (radioVis != null)
 			radioVis.stop();
 	}
 
+	/**
+	 * Reformat the programme info data and start a radiovis receiver.
+	 * 
+	 * @param pi
+	 * @throws RadioDNSException
+	 */
 	void setupRadioVis(ProgrammeInfo pi) throws RadioDNSException {
 		String eid_dec = pi.getInfo().get("eid");
 		String sid_dec = pi.getInfo().get("sid");
@@ -102,7 +127,11 @@ public class PlayProgrammeActivity extends Activity implements RadioVisCallbacks
 			throw new RadioDNSException("Incomplete Programme information !");
 		}
 		
-		String ECC = "4e1"; //TODO menu entry somewhere !
+		HotspotApplication app = (HotspotApplication)getApplication();
+		if (app.ecc == null) {
+			app.ecc = getString(R.string.default_ecc);
+		}
+		String ECC = app.ecc;
 		String EId = Integer.toHexString(Integer.parseInt(eid_dec));
 		String SId = Integer.toHexString(Integer.parseInt(sid_dec));
 		String SubCHId = "0"; // talked with M. Coinchon and M. Barroco
@@ -119,9 +148,20 @@ public class PlayProgrammeActivity extends Activity implements RadioVisCallbacks
 		Log.d(Utils.LOGTAG + "PlayProgrammeActivity", "SHOW " + Url);
 		setVisImage(Url);
 	}
+
+	@Override
+	public void newTEXT(String Text) {
+		// Nothing happensw
+	}
+	
+	/** Handle bitmap stuff */
 	
 	ImageView imView;
 	Bitmap bmImg;
+	/**
+	 * Fetch a picture from the given url and show it on the imView
+	 * @param url
+	 */
 	void setVisImage(String url) {
 		URL myUrl = null;
 		
@@ -152,5 +192,6 @@ public class PlayProgrammeActivity extends Activity implements RadioVisCallbacks
 			e.printStackTrace();
 		}
 	}
+
 	
 }

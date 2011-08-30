@@ -1,9 +1,20 @@
+/*
+Copyright (C) 2011 European Broadcasting Union
+http://www.ebulabs.org
+
+see LICENCE file information.
+*/
 package org.ebulabs.hotspot;
 
 import java.util.Map;
 
 import android.util.Log;
 
+/**
+ * Contains all information for a programme.
+ * @author mpb
+ *
+ */
 public class ProgrammeInfo {
 	
 	public ProgrammeInfo(String name) {
@@ -22,7 +33,7 @@ public class ProgrammeInfo {
 	/** URL where we can receive the programme */
 	public String url;
 
-	/** XML-encoded additional data */
+	/** additional data from the XML programme info */
 	private Map<String, String> info;
 
 	public Map<String, String> getInfo() {

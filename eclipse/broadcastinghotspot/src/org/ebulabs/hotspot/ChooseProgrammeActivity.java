@@ -1,3 +1,9 @@
+/*
+Copyright (C) 2011 European Broadcasting Union
+http://www.ebulabs.org
+
+see LICENCE file information.
+*/
 package org.ebulabs.hotspot;
 
 import java.io.IOException;
@@ -17,6 +23,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
+/**
+ * Activity to present the list of programmes to the user
+ * @author mpb
+ *
+ */
 public class ChooseProgrammeActivity extends Activity {
 	
 	ProgressDialog pd;
@@ -30,10 +41,16 @@ public class ChooseProgrammeActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.programmechoice);
-        
+
         pd = new ProgressDialog(this);
         pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         pd.setMessage("Connecting to programme");
+    }
+    
+    /** Called when the activity is first created. */
+    @Override
+    public void onResume() {
+        super.onResume();
         
         /* Get programme list from daemon */
         
@@ -48,11 +65,12 @@ public class ChooseProgrammeActivity extends Activity {
 			return;
 		}
 		
-		Log.d(Utils.LOGTAG + "onCreate choose prog", "URL defined");
+		Log.d(Utils.LOGTAG + "onCreate choose prog", "URL defined " + url_sz);
 				
 		ListView progList = (ListView)findViewById(R.id.programmeList);
 		
-		/* What happens when user clicks on programme */
+		/* When the user clicks on the programme, fetch the associated programme data, and
+		 * then call the activity to play it */
 		progList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {

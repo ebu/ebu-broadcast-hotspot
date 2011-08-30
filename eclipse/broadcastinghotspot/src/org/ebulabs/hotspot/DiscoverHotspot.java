@@ -1,6 +1,12 @@
+/*
+Copyright (C) 2011 European Broadcasting Union
+http://www.ebulabs.org
+
+see LICENCE file information.
+*/
 package org.ebulabs.hotspot;
 
-import java.net.Inet4Address;
+import java.net.*;
 import javax.jmdns.*;
 import android.util.Log;
 
@@ -21,9 +27,15 @@ public class DiscoverHotspot {
 		
 		class HotspotListener implements ServiceListener
 		{
+			JmDNS jmdns;
+			public HotspotListener(JmDNS jmdns) {
+				this.jmdns = jmdns;
+			}
+			
 			@Override
 			public void serviceAdded(ServiceEvent event) {
 				Log.i(Utils.LOGTAG + ".DiscoverHotspot", "serviceAdded");
+				jmdns.requestServiceInfo(event.getType(), event.getName(), 1);
 			}
 			
 			@Override
@@ -51,12 +63,14 @@ public class DiscoverHotspot {
 			ServiceInfo info = jmdns.getServiceInfo("_bhcp._tcp.local.", "EBU_Broadcast_Hotspot", 5000);
 			
 			
+			
+			
 			if (info != null) {
-				for (Inet4Address a : info.getInet4Addresses()) {
+				for (InetAddress a : info.getInetAddresses()) {
 					Log.d(Utils.LOGTAG + ".DiscoverHotspot", "addr: " + a.toString());
 				}
 				for (String a : info.getURLs()) {
-					Log.d(Utils.LOGTAG + ".DiscoverHotspot", "addr: " + a);
+					Log.d(Utils.LOGTAG + ".DiscoverHotspot", "url: " + a);
 				}
 				Log.d(Utils.LOGTAG + ".DiscoverHotspot", info.getServer());
 				Log.d(Utils.LOGTAG + ".DiscoverHotspot", Integer.toString(info.getPort()));
@@ -68,7 +82,7 @@ public class DiscoverHotspot {
 			} 
 				 
 			Log.d(Utils.LOGTAG + ".DiscoverHotspot", "addServiceListener");
-			jmdns.addServiceListener("_bhcp._tcp.local.", new HotspotListener());
+			jmdns.addServiceListener("_bhcp._tcp.local.", new HotspotListener(jmdns));
 		} catch (Exception e) {
 			Log.e(Utils.LOGTAG + ".DiscoverHotspot", "jmdns failed");
 			e.printStackTrace();
@@ -88,6 +102,9 @@ public class DiscoverHotspot {
 		String ret = null;
 
 		if (this.info != null) {
+			/*
+			
+			// WHY WHY WHY do I only get IPv6 addresses ???
 			
 			Log.d(Utils.LOGTAG + ".DiscoverHotspot", "Inet4adlist");
 			for (Inet4Address a : info.getInet4Addresses()) {
@@ -97,12 +114,13 @@ public class DiscoverHotspot {
 			Inet4Address[] addrs = info.getInet4Addresses();
 			if (addrs.length > 0)
 				ret = "http:/" + addrs[0].toString() + ":" + Integer.toString(info.getPort());
+			*/
+			
+			String[] addrs = info.getURLs();
+			if (addrs.length > 0)
+				ret = addrs[0];	
 		}
 
 		return ret;
 	}
-
 }
-
-
-

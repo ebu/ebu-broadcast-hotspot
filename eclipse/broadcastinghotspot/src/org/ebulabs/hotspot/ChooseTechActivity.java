@@ -1,38 +1,45 @@
+/*
+Copyright (C) 2011 European Broadcasting Union
+http://www.ebulabs.org
+
+see LICENCE file information.
+*/
 package org.ebulabs.hotspot;
 
 import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.UnknownHostException;
-import java.sql.Driver;
+import java.net.*;
 import java.util.ArrayList;
-
-import org.apache.http.conn.util.InetAddressUtils;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class ChooseTechActivity extends Activity implements HotspotDiscoveredCallback{
+/**
+ * Activity which presents the different technologies implemented on the hotspot
+ * 
+ * For now, this only supports DAB
+ * 
+ * TODO: a lot of processing (fetching data from the hotspot) should be done in separate
+ * threads.
+ *  
+ * @author mpb
+ *
+ */
+public class ChooseTechActivity extends Activity implements HotspotDiscoveredCallback {
 	
+	/* mcastlock required for Zeroconf discovery */
 	android.net.wifi.WifiManager.MulticastLock mcastlock;
 	DiscoverHotspot dh;
 	ProgressDialog pd;
@@ -55,9 +62,7 @@ public class ChooseTechActivity extends Activity implements HotspotDiscoveredCal
         
         mcastlock = wifi.createMulticastLock("HotspotDnsSDLock");
         mcastlock.setReferenceCounted(true);
-        
     }
-    
     
     @Override
     public void onPause() {
@@ -84,10 +89,20 @@ public class ChooseTechActivity extends Activity implements HotspotDiscoveredCal
         pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         pd.setMessage("Trying to find Hotspot");
         
-        //pd.show();
+        // TODO: Okay now, Zeroconf is a bit of an arse. It only gives me IPv6 addresses
+        // even though I publish only on IPv4. Therefore, it is not active.
         
+        // BEGIN GARBAGE
+        // if Zeroconf
+        //pd.show();
         //this.dh = new DiscoverHotspot(this);
-        this.foundHotspotAt("http://192.168.1.114:8080");
+        
+        // with quick workaround
+        //this.foundHotspotAt(getString(R.string.url));
+        // END GARBAGE
+        
+        // With separate configuration
+        initialise();
     }
 
     /** Gets called when DiscoverHotspot received the URL through Zeroconf */
@@ -99,14 +114,36 @@ public class ChooseTechActivity extends Activity implements HotspotDiscoveredCal
         if (app.hotspotURL == null) {
         	app.hotspotURL = zeroconf_url;
         	pd.dismiss();
-        	initialiseOnce();
+        	initialise();
         }
-        
 	}
 	
-	void initialiseOnce() {
+	/* Create menu */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.choosetechmenu, menu);
+        return true;
+    }
+        
+    /* Define menu pressed */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.menushowconfig:
+        	startActivity(new Intent("org.ebulabs.hotspot.CONFIGURE"));
+            return true;
+        }
+       
+        return super.onOptionsItemSelected(item);
+    }
+	
+	void initialise() {
         
         HotspotApplication app = ((HotspotApplication)getApplication());
+        if (app.hotspotURL == null) {
+        	app.hotspotURL = getString(R.string.default_url);
+        }
         String zeroconf_url = app.hotspotURL;
         
         Log.i(Utils.LOGTAG + "onCreate choose tech", "URL from mdns " + zeroconf_url);
@@ -115,7 +152,7 @@ public class ChooseTechActivity extends Activity implements HotspotDiscoveredCal
         /* Get list of techs from daemon */
         
         URL url;
-        //String url_sz = getString(R.string.daemon_url) + "/capabilities";
+        
         String url_sz = zeroconf_url + "/capabilities";
 		try {
 			url = new URL(url_sz);
@@ -125,9 +162,7 @@ public class ChooseTechActivity extends Activity implements HotspotDiscoveredCal
 		}
 		
 		Log.d(Utils.LOGTAG + "onCreate choose tech", "URL defined");
-		
-		//ArrayAdapter<String> techListAdapter = new ArrayAdapter<String>(this, R.id.techList, )
-		
+				
 		ListView techList = (ListView)findViewById(R.id.techList);
         
 		techList.setOnItemClickListener(new OnItemClickListener() {
@@ -145,8 +180,6 @@ public class ChooseTechActivity extends Activity implements HotspotDiscoveredCal
      	    	   }
      	        }
             	
-            	 
-            	
             	startActivity(new Intent("org.ebulabs.hotspot.CHOOSE_PROGRAMME"));
             }
           });
@@ -157,10 +190,16 @@ public class ChooseTechActivity extends Activity implements HotspotDiscoveredCal
 			conn = url.openConnection();
 			
 			Log.d(Utils.LOGTAG + "onCreate choose tech", "Connection opened");
-		
-	        if (!conn.getContentType().equals("text/xml")) {
+			String contentType = conn.getContentType();
+			
+	        if (contentType == null) {
+	        	toast("Getting programe list failed");
+	        	return;
+	        }
+	        	
+	        if (!contentType.equals("text/xml")) {
 	        	toast("Error: Content-Type is not text/xml !");
-	        	Log.e(Utils.LOGTAG + "onCreate choose tech", "Content type is '" + conn.getContentType() + "'");
+	        	Log.e(Utils.LOGTAG + "onCreate choose tech", "Content type is '" + contentType + "'");
 	        }
 	        
 	        XMLCapabilitiesParser p;
