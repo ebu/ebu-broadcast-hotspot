@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svnroot/jmdns/!svn/ver/271/tags/jmdns-3.4.0
+END
+LICENSE
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/jmdns/!svn/ver/271/tags/jmdns-3.4.0/LICENSE
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/jmdns/!svn/ver/271/tags/jmdns-3.4.0/.project
+END
+clover.license.txt
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/jmdns/!svn/ver/271/tags/jmdns-3.4.0/clover.license.txt
+END
+pom.xml
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/jmdns/!svn/ver/271/tags/jmdns-3.4.0/pom.xml
+END
+jmdns.iml
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/jmdns/!svn/ver/271/tags/jmdns-3.4.0/jmdns.iml
+END
+LICENSE-LGPL.txt
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/jmdns/!svn/ver/271/tags/jmdns-3.4.0/LICENSE-LGPL.txt
+END
+checkstyle.xml
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/jmdns/!svn/ver/271/tags/jmdns-3.4.0/checkstyle.xml
+END
+build.xml
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/jmdns/!svn/ver/271/tags/jmdns-3.4.0/build.xml
+END
+NOTICE.txt
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/jmdns/!svn/ver/271/tags/jmdns-3.4.0/NOTICE.txt
+END
+.classpath
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/jmdns/!svn/ver/271/tags/jmdns-3.4.0/.classpath
+END
+jmdns.ipr
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/jmdns/!svn/ver/271/tags/jmdns-3.4.0/jmdns.ipr
+END
+fulllogging.properties
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/jmdns/!svn/ver/271/tags/jmdns-3.4.0/fulllogging.properties
+END
+CHANGELOG.txt
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svnroot/jmdns/!svn/ver/271/tags/jmdns-3.4.0/CHANGELOG.txt
+END
+README.txt
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/jmdns/!svn/ver/271/tags/jmdns-3.4.0/README.txt
+END
+jmdns.iws
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/jmdns/!svn/ver/271/tags/jmdns-3.4.0/jmdns.iws
+END

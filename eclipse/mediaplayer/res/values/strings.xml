@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="url">udp://239.10.10.1:2720</string>
+    <string name="app_name">EBU Hotspot Mediaplayer</string>
+    <string name="menu1">Start Stream</string>
+</resources>

@@ -1,0 +1,42 @@
+EBU Broadcasting Hotspot
+2011, Matthias P. Brändli
+=========================
+
+The goal of this project is to create a prototype for a broadcasting hotspot,
+which receives DVB, DAB and other signals using one or several USB receivers,
+and retransmits them over Ethernet/WiFi to a handheld device (Android/iOS).
+
+Streaming video to android works, using VLC on the hotspot. No control code has been
+written for it, because I am still looking for a way to change the DVB programme
+remotely for VLC.
+
+Streaming DAB to android works, and the control interface in the hotspot daemon
+has been written.
+
+
+Description of folder contents:
+
+dbus/
+ - contains the first implementation of a python control interface to openmokast
+   using dbus. It does not support all commands, but serves as an example.
+
+dvbchans.txt
+ - list of DVB channels on the swiss channel 34
+
+dvblast.conf ffserver.conf
+ - test configurations for dvblast and ffserver, which are of no great use. They're only
+   partly correct anyway.
+
+examples-vlc.txt
+ - contains different options I tried to get video streaming to work with a DVB dongle and with
+   android. The conclusion is the most important part of this document.
+
+gstreamer/
+ - experimentation with gstreamer, which is not very practical for the task at hand.
+
+hotspotd/
+ - python code for the hotspot daemon, running on the device with the hardware receivers (DAB, DVB, whatever...)
+
+stream.sh
+ - script to call VLC for DVB streaming
+

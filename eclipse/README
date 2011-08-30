@@ -1,0 +1,20 @@
+Android projects for eclipse
+============================
+
+first/
+ - test project for an XMLRPC client on android, which finally did not get used.
+   There is a corresponding test server in the python subfolder
+
+mediaplayer/
+ - test project to test the functionality of the android MediaServer class.
+   It can play audio and video streams, with all supported android formats.
+
+broadcastinghotspot/
+ - android app which connects to the hotspot, and plays the media.
+
+jmdns/
+ - source code for the jmDNS multicast DNS package used for Zeroconf
+
+hotspoticon.xcf
+ - GIMP icon for android app
+

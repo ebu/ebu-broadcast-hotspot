@@ -1,0 +1,19 @@
+package org.ebulabs.hotspot;
+
+import java.util.ArrayList;
+
+import android.app.Application;
+
+public class HotspotApplication extends Application {
+	
+	public String hotspotURL = "http://192.168.1.114:8080";
+	public String ecc = "4e1";
+	
+	public Tech activeTech;
+	public ArrayList<Tech> allTechs;
+	
+	public ProgrammeInfo pi;
+	
+	public boolean enableAudio;
+
+}
