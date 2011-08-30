@@ -41,7 +41,7 @@ DVB = Tech('DVB', [dc.DVBController()], [CAP_VIDEO, CAP_AUDIO])
 DAB = Tech('DAB', [dc.DABController()], [CAP_AUDIO, CAP_SLIDESHOW])
 Dummy = Tech('Dummy', [dc.DummyController()], [CAP_AUDIO])
 
-techlist = [DVB, DAB, Dummy]
+techlist = [DAB]
 
 def name_to_tech(servname):
     servs = filter(lambda x: x.name == servname, techlist)
