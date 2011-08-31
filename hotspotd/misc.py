@@ -49,7 +49,7 @@ def capabilities(techlist):
         for d in serv.devices:
             serv_devs = ET.SubElement(serv_el, "device")
             serv_devs.attrib["id"] = d.dev_id
-            for f in d.get_frequency_list():
+            for f in d.get_frequency_list().values():
                 freq_el = ET.SubElement(serv_devs, "frequency")
                 freq_el.text = str(f)
     

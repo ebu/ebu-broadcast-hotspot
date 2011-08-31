@@ -22,6 +22,7 @@ tech_links = '\n '.join([
         '<a href="/{tech}/reload">Reload/Restart {tech}</a><br />',
         '<form method="post" action="/{tech}/frequency"><p>',
         'Frequency : <input type="text" name="value" value="223936000" />',
+        '<input type="submit" value="Set {tech} Frequency" />',
         '</p></form>',
         '<form method="post" action="/{tech}/frequency"><p>',
         'Channel :',
