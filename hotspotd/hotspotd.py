@@ -21,8 +21,10 @@ tech_links = '\n '.join([
         '<a href="/{tech}/frequency">{tech} frequency info</a><br />',
         '<a href="/{tech}/reload">Reload/Restart {tech}</a><br />',
         '<form method="post" action="/{tech}/frequency"><p>',
-        'Frequency :',
-        #'<input type="text" name="value" value="223936000" />',
+        'Frequency : <input type="text" name="value" value="223936000" />',
+        '</p></form>',
+        '<form method="post" action="/{tech}/frequency"><p>',
+        'Channel :',
         '<select name="value">',
         '{freq_options}',
         '</select>',
@@ -38,7 +40,7 @@ freq_option = '<option value="{freq}">{chan}</option>'
         
 help_message_header = '\n'.join([
         '<html><head><title>Hotspot</title></head>',
-        '<body style="font-family:verdana; color:#555">',
+        '<body style="font-family:verdana,sans-serif; color:#555">',
         '<a href="http://tech.ebu.ch">',
         '<img src="http://www.ebulabs.org/radiovismanager/img/ebulogo.png" border=0 style="float:left; padding-right:30px;" />',
         '</a>',
