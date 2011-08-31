@@ -96,6 +96,7 @@ class StompConnectionHandler extends Thread {
 			
 			Log.w("RadioDNS", "Subscribing to " + topic);
 			out.print("SUBSCRIBE\ndestination: " + this.topic + "/image\nack: auto\n\n\0");
+			out.print("SUBSCRIBE\ndestination: " + this.topic + "/text\nack: auto\n\n\0");
 			
 			while (this.run) {
 				r = receiveMessage(in);
@@ -107,7 +108,17 @@ class StompConnectionHandler extends Thread {
 				Log.d("RadioDNS", "Got message body" + msg.body);
 				
 				if (msg.command.equals("MESSAGE") && msg.body.startsWith("SHOW")) {
-					callbacks.newSHOW(msg.body.substring("SHOW ".length()));
+					if (msg.headers.containsKey("link")) {
+						callbacks.newSHOW(msg.body.substring("SHOW ".length()), msg.headers.get("link"));
+					}
+					else {
+						callbacks.newSHOW(msg.body.substring("SHOW ".length()), null);
+					}
+					
+				}
+				
+				if (msg.command.equals("MESSAGE") && msg.body.startsWith("TEXT")) {
+					callbacks.newTEXT(msg.body.substring("TEXT ".length()));
 				}
 			}
 			Log.i("RadioDNS", "Leaving main loop");
@@ -205,7 +216,7 @@ class StompMessage {
 		msg.headers = new HashMap<String, String>();
 		
 		for (String kv : headers.split("\n")) {
-			String key_val[] = kv.split(":", 1);
+			String key_val[] = kv.split(":", 2);
 			if (key_val.length == 2)
 				msg.headers.put(key_val[0], key_val[1]);
 		}
