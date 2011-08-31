@@ -16,11 +16,11 @@ public interface RadioVisCallbacks {
 	 * A new SHOW has been received, and its URL points to a picture the receiver has to show.
 	 * @param Url
 	 */
-	public void newSHOW(String Url);
+	public void newSHOW(String imageUrl, String linkUrl);
 	
 	/**
 	 * A new TEXT has been received, and should be printed on the screen.
 	 * @param Text
 	 */
-	public void newTEXT(String Text);
+	public void newTEXT(String text);
 }

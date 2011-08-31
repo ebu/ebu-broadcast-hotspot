@@ -12,11 +12,15 @@ import java.util.Map;
 import org.ebulabs.radiodns.*;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +34,9 @@ public class PlayProgrammeActivity extends Activity implements RadioVisCallbacks
 	
 	private MediaPlayer mediaPlayer;
 	private ProgressDialog pd;
-	private RadioVisDAB radioVis; 
+	private RadioVisDAB radioVis;
+	
+	private String linkUrl;
 	
 	private void toast(String t) {
 		Toast.makeText(getApplicationContext(), t, Toast.LENGTH_SHORT).show();
@@ -39,13 +45,32 @@ public class PlayProgrammeActivity extends Activity implements RadioVisCallbacks
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.playprogramme);
 		
-		 pd = new ProgressDialog(this);
-	     pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-	     pd.setMessage("Connecting to programme");
-	     
+		linkUrl = "";
+
+		pd = new ProgressDialog(this);
+		pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		pd.setMessage("Connecting to programme");
+
+		ImageView imView = (ImageView)findViewById(R.id.visView);
+		imView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (linkUrl != null && !linkUrl.equals("")) {
+					Intent i = new Intent(Intent.ACTION_VIEW);
+					i.setData(Uri.parse(linkUrl));
+					startActivity(i);
+				}
+				else {
+					toast("Image link url: incorrect format");
+				}
+
+			}
+		});
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -53,7 +78,6 @@ public class PlayProgrammeActivity extends Activity implements RadioVisCallbacks
 		pd.show();
 
 		// Show some stuff on the textview
-		setContentView(R.layout.playprogramme);
 		TextView v = (TextView)findViewById(R.id.playText);
 		HotspotApplication app = (HotspotApplication)getApplication();
 
@@ -63,13 +87,6 @@ public class PlayProgrammeActivity extends Activity implements RadioVisCallbacks
 			return;
 		}
 		
-		try {
-			setupRadioVis(app.pi);
-		} catch (RadioDNSException e1) {
-			toast("Radiovis setup failed: " + e1.getMessage());
-			Log.e(Utils.LOGTAG + "PlayProgrammeActivity", "Radiovis setup failed");
-		}
-
 		StringBuilder sb = new StringBuilder();
 		sb.append(app.pi.name + "\n" + app.pi.url + "\n\n");
 		Map<String,String> info = app.pi.getInfo();
@@ -79,8 +96,6 @@ public class PlayProgrammeActivity extends Activity implements RadioVisCallbacks
 		}
 		
 		v.setText(sb.toString());
-		
-		
 		
 		// Then start the player if required.
 				
@@ -96,6 +111,14 @@ public class PlayProgrammeActivity extends Activity implements RadioVisCallbacks
 			}
 		}
 		pd.dismiss();
+		
+		try {
+			setupRadioVis(app.pi);
+		} catch (RadioDNSException e1) {
+			toast("Radiovis setup failed: " + e1.getMessage());
+			Log.e(Utils.LOGTAG + "PlayProgrammeActivity", "Radiovis setup failed");
+		}
+
 	}
 	
 	/* Stop the player when leaving the activity */
@@ -144,14 +167,31 @@ public class PlayProgrammeActivity extends Activity implements RadioVisCallbacks
 	
     /* Callback methods from RadioVis */
 	@Override
-	public void newSHOW(String Url) {
-		Log.d(Utils.LOGTAG + "PlayProgrammeActivity", "SHOW " + Url);
-		setVisImage(Url);
+	public void newSHOW(String imageUrl, String linkUrl) {
+		Log.d(Utils.LOGTAG + "PlayProgrammeActivity", "SHOW: " + imageUrl);
+		Log.d(Utils.LOGTAG + "PlayProgrammeActivity", "SHOW URL: " + linkUrl);
+		setVisImage(imageUrl);
+		this.linkUrl = linkUrl;
 	}
 
+	TextView radiodnsTextview;
+	String radiodnsText;
 	@Override
-	public void newTEXT(String Text) {
-		// Nothing happensw
+	public void newTEXT(String text) {
+		if (text != null) {
+			radiodnsTextview = (TextView)findViewById(R.id.radioDNSText);
+			radiodnsText = text;
+			
+			imView.post(new Runnable() {
+		        public void run() {
+		        	radiodnsTextview.setText(radiodnsText);
+		        }
+		      });
+		}
+		else {
+			toast("RadioDNS TEXT invalid");
+		}
+		
 	}
 	
 	/** Handle bitmap stuff */
