@@ -17,14 +17,14 @@
 <coolItem id="com.android.ide.eclipse.editors.layout.LayoutEditor" itemType="typePlaceholder" x="-1" y="-1"/>
 <coolItem id="org.eclipse.debug.ui.launchActionSet" itemType="typeToolBarContribution" x="120" y="30"/>
 <coolItem id="org.eclipse.jdt.ui.ClassFileEditor" itemType="typePlaceholder" x="-1" y="-1"/>
-<coolItem id="org.eclipse.jdt.ui.CompilationUnitEditor" itemType="typePlaceholder" x="-1" y="-1"/>
+<coolItem id="org.eclipse.jdt.ui.CompilationUnitEditor" itemType="typeToolBarContribution" x="-1" y="-1"/>
 <coolItem id="org.eclipse.jdt.ui.JavaElementCreationActionSet" itemType="typeToolBarContribution" x="104" y="30"/>
 <coolItem id="org.eclipse.search.searchActionSet" itemType="typeToolBarContribution" x="76" y="30"/>
 <coolItem id="org.eclipse.ui.DefaultTextEditor" itemType="typePlaceholder" x="-1" y="-1"/>
-<coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="68" y="30"/>
+<coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="124" y="30"/>
 <coolItem id="org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorPart" itemType="typePlaceholder" x="-1" y="-1"/>
 <coolItem id="org.eclipse.wst.xml.ui.perspective.NewFileToolBar" itemType="typeToolBarContribution" x="-1" y="-1"/>
-<coolItem id="org.eclipse.wst.xml.ui.design.DesignToolBar" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="org.eclipse.wst.xml.ui.design.DesignToolBar" itemType="typeToolBarContribution" x="130" y="30"/>
 <coolItem id="group.nav" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.ui.workbench.navigate" itemType="typeToolBarContribution" x="184" y="30"/>
 <coolItem id="group.editor" itemType="typeGroupMarker"/>
@@ -36,10 +36,26 @@
 <editorArea activeWorkbook="DefaultEditorWorkbook">
 <info part="DefaultEditorWorkbook">
 <folder appearance="1" expanded="2">
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+<part id="1"/>
+<part id="2"/>
+</presentation>
 </folder>
 </info>
 </editorArea>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="RadioVisCallbacks.java" partName="RadioVisCallbacks.java" path="/home/mpb/hotspot/ebu-hotspot-hg/eclipse/broadcastinghotspot/src/org/ebulabs/radiodns/RadioVisCallbacks.java" title="RadioVisCallbacks.java" tooltip="broadcastinghotspot/src/org/ebulabs/radiodns/RadioVisCallbacks.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/broadcastinghotspot/src/org/ebulabs/radiodns/RadioVisCallbacks.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="447" selectionTopPixel="0"/>
+</editor>
+<editor activePart="true" focus="true" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="PlayProgrammeActivity.java" partName="PlayProgrammeActivity.java" path="/home/mpb/hotspot/ebu-hotspot-hg/eclipse/broadcastinghotspot/src/org/ebulabs/hotspot/PlayProgrammeActivity.java" title="PlayProgrammeActivity.java" tooltip="broadcastinghotspot/src/org/ebulabs/hotspot/PlayProgrammeActivity.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/broadcastinghotspot/src/org/ebulabs/hotspot/PlayProgrammeActivity.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="2153" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="ConfigureActivity.java" partName="ConfigureActivity.java" path="/home/mpb/hotspot/ebu-hotspot-hg/eclipse/broadcastinghotspot/src/org/ebulabs/hotspot/ConfigureActivity.java" title="ConfigureActivity.java" tooltip="broadcastinghotspot/src/org/ebulabs/hotspot/ConfigureActivity.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/broadcastinghotspot/src/org/ebulabs/hotspot/ConfigureActivity.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="725" selectionTopPixel="0"/>
+</editor>
 </editors>
 <views>
 <view id="org.eclipse.jdt.ui.TypeHierarchy" partName="Hierarchy">
@@ -86,10 +102,11 @@
 </view>
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
-<expanded>&#x0A;<category IMemento.internal.id="Warnings"/>
+<expanded>
+<category IMemento.internal.id="Warnings"/>
 <category IMemento.internal.id="Errors"/>
 </expanded>
-<columnWidths org.eclipse.ui.ide.locationField="63" org.eclipse.ui.ide.markerType="635" org.eclipse.ui.ide.pathField="123" org.eclipse.ui.ide.resourceField="93" org.eclipse.ui.ide.severityAndDescriptionField="300"/>
+<columnWidths org.eclipse.ui.ide.locationField="0" org.eclipse.ui.ide.markerType="0" org.eclipse.ui.ide.pathField="0" org.eclipse.ui.ide.resourceField="0" org.eclipse.ui.ide.severityAndDescriptionField="0"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.pathField"/>
@@ -142,7 +159,7 @@
 <viewState/>
 </view>
 </views>
-<perspectives activePart="org.eclipse.jdt.ui.PackageExplorer" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
+<perspectives activePart="org.eclipse.jdt.ui.CompilationUnitEditor" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="org.eclipse.jdt.internal.ui.JavaPerspectiveFactory" id="org.eclipse.jdt.ui.JavaPerspective" label="Java"/>
 <alwaysOnActionSet id="org.eclipse.ui.cheatsheets.actionSet"/>
@@ -305,47 +322,66 @@
 <view id="org.eclipse.ui.views.ContentOutline"/>
 <view id="com.android.ide.eclipse.ddms.views.LogCatView"/>
 <fastViewBars/>
-<layout>&#x0A;<mainWindow>&#x0A;<info folder="true" part="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder activePageID="org.eclipse.debug.ui.DebugView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.debug.ui.DebugView" label="Debug"/>
+<layout>
+<mainWindow>
+<info folder="true" part="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder activePageID="org.eclipse.debug.ui.DebugView" appearance="2" expanded="2">
+<page content="org.eclipse.debug.ui.DebugView" label="Debug"/>
 <page content="org.eclipse.ui.views.ResourceNavigator" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.ui.PackageExplorer" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.ui.TypeHierarchy" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="954" ratioRight="318" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="954" ratioRight="318" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
 <page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.debug.internal.ui.ConsoleFolderView" ratio="0.7497062" ratioLeft="638" ratioRight="213" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
+<info folder="true" part="org.eclipse.debug.internal.ui.ConsoleFolderView" ratio="0.7497062" ratioLeft="638" ratioRight="213" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
+<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
 <page content="org.eclipse.ui.views.TaskList" label="Tasks"/>
 <page content="org.eclipse.ui.views.BookmarkView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.PropertySheet" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.debug.ui.DisplayView" label="LabelNotFound"/>
 <page content="org.eclipse.search.SearchResultView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
 <part id="1"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@9e9851" ratio="0.5" ratioLeft="636" ratioRight="636" relationship="2" relative="org.eclipse.debug.internal.ui.ConsoleFolderView">&#x0A;<folder activePageID="com.android.ide.eclipse.ddms.views.LogCatView" appearance="2" expanded="2">&#x0A;<page content="com.android.ide.eclipse.ddms.views.LogCatView" label="LogCat"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@9e9851" ratio="0.5" ratioLeft="636" ratioRight="636" relationship="2" relative="org.eclipse.debug.internal.ui.ConsoleFolderView">
+<folder activePageID="com.android.ide.eclipse.ddms.views.LogCatView" appearance="2" expanded="2">
+<page content="com.android.ide.eclipse.ddms.views.LogCatView" label="LogCat"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
 </presentation>
 </folder>
 </info>
-<info part="org.eclipse.ui.editorss" ratio="0.44984326" ratioLeft="287" ratioRight="351" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView"/>
-<info folder="true" part="org.eclipse.debug.internal.ui.OutlineFolderView" ratio="0.75" ratioLeft="954" ratioRight="318" relationship="2" relative="org.eclipse.ui.editorss">&#x0A;<folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
+<info part="org.eclipse.ui.editorss" ratio="0.36234176" ratioLeft="229" ratioRight="403" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView"/>
+<info folder="true" part="org.eclipse.debug.internal.ui.OutlineFolderView" ratio="0.75" ratioLeft="954" ratioRight="318" relationship="2" relative="org.eclipse.ui.editorss">
+<folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">
+<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
 <page content="org.eclipse.ant.ui.views.AntView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.debug.internal.ui.ToolsFolderView" ratio="0.5" ratioLeft="636" ratioRight="636" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder activePageID="org.eclipse.debug.ui.VariableView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.debug.ui.VariableView" label="Variables"/>
+<info folder="true" part="org.eclipse.debug.internal.ui.ToolsFolderView" ratio="0.5" ratioLeft="636" ratioRight="636" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder activePageID="org.eclipse.debug.ui.VariableView" appearance="2" expanded="2">
+<page content="org.eclipse.debug.ui.VariableView" label="Variables"/>
 <page content="org.eclipse.debug.ui.BreakpointView" label="Breakpoints"/>
 <page content="org.eclipse.debug.ui.ExpressionView" label="LabelNotFound"/>
 <page content="org.eclipse.debug.ui.RegisterView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
 <part id="1"/>
 </presentation>
 </folder>
@@ -392,30 +428,42 @@
 <view id="com.android.ide.eclipse.ddms.views.LogCatView"/>
 <view id="org.eclipse.ui.console.ConsoleView"/>
 <fastViewBars/>
-<layout>&#x0A;<mainWindow>&#x0A;<info folder="true" part="devices">&#x0A;<folder activePageID="com.android.ide.eclipse.ddms.views.DeviceView" appearance="2" expanded="2">&#x0A;<page content="com.android.ide.eclipse.ddms.views.DeviceView" label="Devices"/>
+<layout>
+<mainWindow>
+<info folder="true" part="devices">
+<folder activePageID="com.android.ide.eclipse.ddms.views.DeviceView" appearance="2" expanded="2">
+<page content="com.android.ide.eclipse.ddms.views.DeviceView" label="Devices"/>
 <page content="com.android.ide.eclipse.ddms.views.DeviceView:*" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="954" ratioRight="318" relationship="2" relative="devices">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="954" ratioRight="318" relationship="2" relative="devices">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
 <page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
 </folder>
 </info>
-<info folder="true" part="logcat" ratio="0.495283" ratioLeft="420" ratioRight="428" relationship="4" relative="devices">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="com.android.ide.eclipse.ddms.views.LogCatView:*" label="LabelNotFound"/>
+<info folder="true" part="logcat" ratio="0.495283" ratioLeft="420" ratioRight="428" relationship="4" relative="devices">
+<folder appearance="2" expanded="2">
+<page content="com.android.ide.eclipse.ddms.views.LogCatView:*" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.2995283" ratioLeft="381" ratioRight="891" relationship="2" relative="devices"/>
-<info folder="true" part="ddms-detail" ratio="0.49943882" ratioLeft="445" ratioRight="446" relationship="2" relative="org.eclipse.ui.editorss">&#x0A;<folder activePageID="com.android.ide.eclipse.ddms.views.LogCatView" appearance="2" expanded="2">&#x0A;<page content="com.android.ide.eclipse.ddms.views.ThreadView" label="Threads"/>
+<info folder="true" part="ddms-detail" ratio="0.49943882" ratioLeft="445" ratioRight="446" relationship="2" relative="org.eclipse.ui.editorss">
+<folder activePageID="com.android.ide.eclipse.ddms.views.LogCatView" appearance="2" expanded="2">
+<page content="com.android.ide.eclipse.ddms.views.ThreadView" label="Threads"/>
 <page content="com.android.ide.eclipse.ddms.views.HeapView" label="Heap"/>
 <page content="com.android.ide.eclipse.ddms.views.AllocTrackerView" label="Allocation Tracker"/>
 <page content="com.android.ide.eclipse.ddms.views.FileExplorerView" label="File Explorer"/>
 <page content="com.android.ide.eclipse.ddms.views.LogCatView" label="LogCat"/>
 <page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
 <page content="com.android.ide.eclipse.ddms.views.ThreadView:*" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
 <part id="1"/>
 <part id="2"/>
 <part id="3"/>
@@ -424,9 +472,12 @@
 </presentation>
 </folder>
 </info>
-<info folder="true" part="emulator" ratio="0.5" ratioLeft="340" ratioRight="340" relationship="4" relative="devices">&#x0A;<folder activePageID="com.android.ide.eclipse.ddms.views.EmulatorControlView" appearance="2" expanded="2">&#x0A;<page content="com.android.ide.eclipse.ddms.views.EmulatorControlView" label="Emulator Control"/>
+<info folder="true" part="emulator" ratio="0.5" ratioLeft="340" ratioRight="340" relationship="4" relative="devices">
+<folder activePageID="com.android.ide.eclipse.ddms.views.EmulatorControlView" appearance="2" expanded="2">
+<page content="com.android.ide.eclipse.ddms.views.EmulatorControlView" label="Emulator Control"/>
 <page content="com.android.ide.eclipse.ddms.views.EmulatorControlView:*" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
 </presentation>
 </folder>
 </info>
@@ -435,7 +486,167 @@
 </perspective>
 </perspectives>
 <workingSets/>
-<navigationHistory/>
+<navigationHistory>
+<editors>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/broadcastinghotspot/src/org/ebulabs/hotspot/XMLCapabilitiesParser.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/broadcastinghotspot/src/org/ebulabs/hotspot/ChooseTechActivity.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/broadcastinghotspot/src/org/ebulabs/radiodns/RadioVisCallbacks.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/broadcastinghotspot/src/org/ebulabs/radiodns/RadioVisDAB.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/broadcastinghotspot/src/org/ebulabs/hotspot/PlayProgrammeActivity.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/broadcastinghotspot/src/org/ebulabs/hotspot/ConfigureActivity.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.layout.LayoutEditor" path="/broadcastinghotspot/res/layout/playprogramme.xml"/>
+<editor factoryID="org.eclipse.jdt.ui.ClassFileEditorInputFactory" id="org.eclipse.jdt.ui.ClassFileEditor" org.eclipse.jdt.ui.ClassFileIdentifier="=broadcastinghotspot/\/home\/mpb\/hotspot\/android-sdk-linux_x86\/platforms\/android-8\/android.jar&lt;java.lang(ClassLoader.class"/>
+<editor factoryID="org.eclipse.jdt.ui.ClassFileEditorInputFactory" id="org.eclipse.jdt.ui.ClassFileEditor" org.eclipse.jdt.ui.ClassFileIdentifier="=broadcastinghotspot/\/home\/mpb\/hotspot\/android-sdk-linux_x86\/platforms\/android-8\/android.jar&lt;java.lang(Object.class"/>
+<editor factoryID="org.eclipse.jdt.ui.ClassFileEditorInputFactory" id="org.eclipse.jdt.ui.ClassFileEditor" org.eclipse.jdt.ui.ClassFileIdentifier="=broadcastinghotspot/\/home\/mpb\/hotspot\/android-sdk-linux_x86\/platforms\/android-8\/android.jar&lt;java.lang(NullPointerException.class"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/broadcastinghotspot/src/org/xbill/DNS/A6Record.java"/>
+</editors>
+<item historyLabel="XMLCapabilitiesParser.java" index="0">
+<position info="not_deleted" x="1350" y="0"/>
+</item>
+<item historyLabel="ChooseTechActivity.java" index="1">
+<position info="not_deleted" x="6220" y="56"/>
+</item>
+<item historyLabel="RadioVisCallbacks.java" index="2">
+<position info="not_deleted" x="3" y="0"/>
+</item>
+<item historyLabel="RadioVisDAB.java" index="3">
+<position info="not_deleted" x="2999" y="0"/>
+</item>
+<item historyLabel="RadioVisCallbacks.java" index="2">
+<position info="not_deleted" x="447" y="0"/>
+</item>
+<item historyLabel="RadioVisDAB.java" index="3">
+<position info="not_deleted" x="3231" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="1781" y="0"/>
+</item>
+<item historyLabel="ConfigureActivity.java" index="5">
+<position info="not_deleted" x="3" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="1781" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="1248" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="1760" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="4560" y="0"/>
+</item>
+<item historyLabel="playprogramme.xml" index="6"/>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="4560" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="4683" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="4958" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="4959" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="4925" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="1443" y="51"/>
+</item>
+<item historyLabel="RadioVisCallbacks.java" index="2">
+<position info="not_deleted" x="447" y="0"/>
+</item>
+<item historyLabel="RadioVisDAB.java" index="3">
+<position info="not_deleted" x="3231" y="0"/>
+</item>
+<item historyLabel="ConfigureActivity.java" index="5">
+<position info="not_deleted" x="3" y="0"/>
+</item>
+<item historyLabel="RadioVisCallbacks.java" index="2">
+<position info="not_deleted" x="447" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="1398" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="1383" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="1443" y="0"/>
+</item>
+<item historyLabel="ClassLoader.class" index="7">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="1443" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="1443" y="0"/>
+</item>
+<item historyLabel="Object.class" index="8">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="1443" y="0"/>
+</item>
+<item historyLabel="NullPointerException.class" index="9">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="1443" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="1698" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="1399" y="0"/>
+</item>
+<item historyLabel="ConfigureActivity.java" index="5">
+<position info="not_deleted" x="725" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="4329" y="0"/>
+</item>
+<item historyLabel="RadioVisCallbacks.java" index="2">
+<position info="not_deleted" x="447" y="0"/>
+</item>
+<item historyLabel="RadioVisDAB.java" index="3">
+<position info="not_deleted" x="3231" y="0"/>
+</item>
+<item historyLabel="RadioVisDAB.java" index="3">
+<position info="not_deleted" x="2570" y="0"/>
+</item>
+<item historyLabel="RadioVisDAB.java" index="3">
+<position info="not_deleted" x="5126" y="0"/>
+</item>
+<item historyLabel="RadioVisCallbacks.java" index="2">
+<position info="not_deleted" x="447" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="4329" y="0"/>
+</item>
+<item historyLabel="playprogramme.xml" index="6"/>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="4329" y="0"/>
+</item>
+<item historyLabel="ConfigureActivity.java" index="5">
+<position info="not_deleted" x="725" y="0"/>
+</item>
+<item historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="2153" y="0"/>
+</item>
+<item historyLabel="A6Record.java" index="10">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item active="true" historyLabel="PlayProgrammeActivity.java" index="4">
+<position info="not_deleted" x="2153" y="0"/>
+</item>
+</navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
 </page>
 <workbenchWindowAdvisor/>
@@ -456,11 +667,32 @@
 </trimLayout>
 </window>
 <mruList>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="RadioVisDAB.java" tooltip="broadcastinghotspot/src/org/ebulabs/radiodns/RadioVisDAB.java">
-<persistable path="/broadcastinghotspot/src/org/ebulabs/radiodns/RadioVisDAB.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="A6Record.java" tooltip="broadcastinghotspot/src/org/xbill/DNS/A6Record.java">
+<persistable path="/broadcastinghotspot/src/org/xbill/DNS/A6Record.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.layout.LayoutEditor" name="playprogramme.xml" tooltip="broadcastinghotspot/res/layout/playprogramme.xml">
+<persistable path="/broadcastinghotspot/res/layout/playprogramme.xml"/>
+</file>
+<file factoryID="org.eclipse.jdt.ui.ClassFileEditorInputFactory" id="org.eclipse.jdt.ui.ClassFileEditor" name="ClassLoader.class" tooltip="java.lang.ClassLoader">
+<persistable org.eclipse.jdt.ui.ClassFileIdentifier="=broadcastinghotspot/\/home\/mpb\/hotspot\/android-sdk-linux_x86\/platforms\/android-8\/android.jar&lt;java.lang(ClassLoader.class"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="ConfigureActivity.java" tooltip="broadcastinghotspot/src/org/ebulabs/hotspot/ConfigureActivity.java">
+<persistable path="/broadcastinghotspot/src/org/ebulabs/hotspot/ConfigureActivity.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="PlayProgrammeActivity.java" tooltip="broadcastinghotspot/src/org/ebulabs/hotspot/PlayProgrammeActivity.java">
+<persistable path="/broadcastinghotspot/src/org/ebulabs/hotspot/PlayProgrammeActivity.java"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="RadioVisCallbacks.java" tooltip="broadcastinghotspot/src/org/ebulabs/radiodns/RadioVisCallbacks.java">
 <persistable path="/broadcastinghotspot/src/org/ebulabs/radiodns/RadioVisCallbacks.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="RadioVisDAB.java" tooltip="broadcastinghotspot/src/org/ebulabs/radiodns/RadioVisDAB.java">
+<persistable path="/broadcastinghotspot/src/org/ebulabs/radiodns/RadioVisDAB.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="ChooseTechActivity.java" tooltip="broadcastinghotspot/src/org/ebulabs/hotspot/ChooseTechActivity.java">
+<persistable path="/broadcastinghotspot/src/org/ebulabs/hotspot/ChooseTechActivity.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="XMLCapabilitiesParser.java" tooltip="broadcastinghotspot/src/org/ebulabs/hotspot/XMLCapabilitiesParser.java">
+<persistable path="/broadcastinghotspot/src/org/ebulabs/hotspot/XMLCapabilitiesParser.java"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="RadioDNSException.java" tooltip="broadcastinghotspot/src/org/ebulabs/radiodns/RadioDNSException.java">
 <persistable path="/broadcastinghotspot/src/org/ebulabs/radiodns/RadioDNSException.java"/>
@@ -471,35 +703,8 @@
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="XMLProgrammeInfoParser.java" tooltip="broadcastinghotspot/src/org/ebulabs/hotspot/XMLProgrammeInfoParser.java">
 <persistable path="/broadcastinghotspot/src/org/ebulabs/hotspot/XMLProgrammeInfoParser.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="XMLCapabilitiesParser.java" tooltip="broadcastinghotspot/src/org/ebulabs/hotspot/XMLCapabilitiesParser.java">
-<persistable path="/broadcastinghotspot/src/org/ebulabs/hotspot/XMLCapabilitiesParser.java"/>
-</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Utils.java" tooltip="broadcastinghotspot/src/org/ebulabs/hotspot/Utils.java">
 <persistable path="/broadcastinghotspot/src/org/ebulabs/hotspot/Utils.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Tech.java" tooltip="broadcastinghotspot/src/org/ebulabs/hotspot/Tech.java">
-<persistable path="/broadcastinghotspot/src/org/ebulabs/hotspot/Tech.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="ProgrammeInfo.java" tooltip="broadcastinghotspot/src/org/ebulabs/hotspot/ProgrammeInfo.java">
-<persistable path="/broadcastinghotspot/src/org/ebulabs/hotspot/ProgrammeInfo.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="PlayProgrammeActivity.java" tooltip="broadcastinghotspot/src/org/ebulabs/hotspot/PlayProgrammeActivity.java">
-<persistable path="/broadcastinghotspot/src/org/ebulabs/hotspot/PlayProgrammeActivity.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="HotspotException.java" tooltip="broadcastinghotspot/src/org/ebulabs/hotspot/HotspotException.java">
-<persistable path="/broadcastinghotspot/src/org/ebulabs/hotspot/HotspotException.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="HotspotApplication.java" tooltip="broadcastinghotspot/src/org/ebulabs/hotspot/HotspotApplication.java">
-<persistable path="/broadcastinghotspot/src/org/ebulabs/hotspot/HotspotApplication.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="DiscoverHotspot.java" tooltip="broadcastinghotspot/src/org/ebulabs/hotspot/DiscoverHotspot.java">
-<persistable path="/broadcastinghotspot/src/org/ebulabs/hotspot/DiscoverHotspot.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Device.java" tooltip="broadcastinghotspot/src/org/ebulabs/hotspot/Device.java">
-<persistable path="/broadcastinghotspot/src/org/ebulabs/hotspot/Device.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="ConfigureActivity.java" tooltip="broadcastinghotspot/src/org/ebulabs/hotspot/ConfigureActivity.java">
-<persistable path="/broadcastinghotspot/src/org/ebulabs/hotspot/ConfigureActivity.java"/>
 </file>
 </mruList>
 </workbench>
