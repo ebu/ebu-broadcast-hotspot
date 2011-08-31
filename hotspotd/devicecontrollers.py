@@ -15,6 +15,7 @@ from xml.etree import ElementTree as ET
 from urlparse import urlparse
 import time
 from misc import *
+from dabfreq import dab_channels
 
 localhost = "127.0.0.1"
 
@@ -29,6 +30,7 @@ class DeviceController(object):
     def reload(self):
         raise NotImplementedError()
 
+    # return the dictionary of channels: frequency
     def get_frequency_list(self):
         raise NotImplementedError()
 
@@ -68,7 +70,7 @@ class DummyController(DeviceController):
         return "Nothing to do"
 
     def get_frequency_list(self):
-        return [0]
+        return {'0': 0}
 
     def get_frequency(self):
         return self._freq
@@ -112,7 +114,7 @@ class DABController(DeviceController):
         #    print("COULEUR 3 not found")
 
     def get_frequency_list(self):
-        return [223936000]
+        return dab_channels
 
     def reload(self):
         self.rc = OpenmokastReceiverRemote()
@@ -229,6 +231,6 @@ class DVBController(DeviceController):
     def __init__(self):
         self.dev_id = "/dev/dvb/adapter0/"
     def get_frequency_list(self):
-        return [578000000]
+        return {'34': 578000000}
     def shutdown(self):
         pass
