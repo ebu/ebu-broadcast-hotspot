@@ -29,6 +29,9 @@ class Tech(object):
     def reload(self):
         return str([d.reload() for d in self.devices])
 
+    def get_main_device(self):
+        return self.devices[0]
+
     def shutdown(self):
         for d in self.devices:
             try:

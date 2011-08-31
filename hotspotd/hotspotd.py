@@ -13,7 +13,7 @@ import cgi
 import BaseHTTPServer
 import urlparse
 
-tech_links = '\n'.join([
+tech_links = '\n '.join([
         '<h2>Technology: {tech}</h2>',
         '<p>',
         '<a href="/{tech}/programmes">{tech} programme list</a><br />',
@@ -21,7 +21,11 @@ tech_links = '\n'.join([
         '<a href="/{tech}/frequency">{tech} frequency info</a><br />',
         '<a href="/{tech}/reload">Reload/Restart {tech}</a><br />',
         '<form method="post" action="/{tech}/frequency"><p>',
-        'Frequency : <input type="text" name="value" value="223936000" />',
+        'Frequency :',
+        #'<input type="text" name="value" value="223936000" />',
+        '<select name="value">',
+        '{freq_options}',
+        '</select>',
         '<input type="submit" value="Set {tech} Frequency" />',
         '</p></form>',
         '<form method="post" action="/{tech}/programme"><p>',
@@ -29,12 +33,14 @@ tech_links = '\n'.join([
         '<input type="submit" value="Set {tech} Programme" />',
         '</p></form>'
         '</p>'])
+
+freq_option = '<option value="{freq}">{chan}</option>'
         
 help_message_header = '\n'.join([
         '<html><head><title>Hotspot</title></head>',
         '<body style="font-family:verdana; color:#555">',
         '<a href="http://tech.ebu.ch">',
-        '<img src="http://www.ebulabs.org/radiovismanager/img/ebulogo.png" border=0 style="float:left; padding-right:30px;">',
+        '<img src="http://www.ebulabs.org/radiovismanager/img/ebulogo.png" border=0 style="float:left; padding-right:30px;" />',
         '</a>',
         '<h1>EBU Broadcast Hotspot</h1>',
         '<p><b>Debugging access through browser</b></p>',
@@ -44,7 +50,23 @@ help_message_header = '\n'.join([
         '<a href="/capabilities">capabilities</a><br />',
         ])
 
-help_message = help_message_header + "\n".join([tech_links.format(tech=t) for t in sorted(techlist)])
+help_message_footer = '\n'.join([
+        '<h2>Acknowledgements</h2>',
+        '<p>With many thanks to:<br />',
+        '<a href="http://openmokast.org">',
+        '<img src="http://openmokast.org/templates/ja_acrus/images/logo.png" border=0 style="float:left; padding-right:30px;" width="400px" />',
+        '</a></p>',
+        '</body></html>'
+        ])
+
+help_message = help_message_header
+
+for t in techlist:
+    freqs = t.get_main_device().get_frequency_list()
+    fo = "\n  ".join(freq_option.format(chan=chan, freq=freqs[chan]) for chan in sorted(freqs.keys()))
+    help_message += tech_links.format(tech=t, freq_options=fo)
+
+help_message += help_message_footer
 
 class HotspotState:
     programme = None
@@ -113,7 +135,7 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 try:
                     if cmd == "frequency":
                         if get:
-                            freq = s.devices[0].get_frequency()
+                            freq = s.get_main_device().get_frequency()
                             self.send_response(200)
                             self.send_header("Content-Type", "text/plain")
 
@@ -124,7 +146,7 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                             print("new frequency {0}".format(freq))
 
                             try:
-                                s.devices[0].set_frequency(int(freq))
+                                s.get_main_device().set_frequency(int(freq))
                             except ValueError:
                                 self.send_error(400)
                                 return
@@ -132,7 +154,7 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
                     elif cmd == "programmes": # list of programmes
                         if get:
-                            programmes = s.devices[0].get_programme_list()
+                            programmes = s.get_main_device().get_programme_list()
                             root = ET.Element("programmes")
                             
                             for pr in programmes:
@@ -155,8 +177,8 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
                             if HotspotState.programme is not None:
                                 name_el.text = HotspotState.programme
-                                url_el.text = s.devices[0].get_stream_url(HotspotState.programme)
-                                s.devices[0].fill_additional_info(HotspotState.programme, info_el)
+                                url_el.text = s.get_main_device().get_stream_url(HotspotState.programme)
+                                s.get_main_device().fill_additional_info(HotspotState.programme, info_el)
 
                             message = xml_prolog + ET.tostring(root, encoding="utf-8")
                             self.send_response(200)
@@ -165,11 +187,11 @@ class HotspotHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                             HotspotState.programme = post_data
                             print("new programme {0}".format(HotspotState.programme))
 
-                            if not s.devices[0].start_stream(HotspotState.programme):
+                            if not s.get_main_device().start_stream(HotspotState.programme):
                                 self.send_error(400)
                                 return
 
-                            message = s.devices[0].get_stream_url(HotspotState.programme)
+                            message = s.get_main_device().get_stream_url(HotspotState.programme)
 
                             self.send_response(200)
                             self.send_header("Content-Type", "text/plain")
