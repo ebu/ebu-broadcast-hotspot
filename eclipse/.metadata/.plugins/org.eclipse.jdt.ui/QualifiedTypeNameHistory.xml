@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="java.lang.Math"/>
-<fullyQualifiedTypeName name="android.widget.TextView"/>
-<fullyQualifiedTypeName name="org.ebulabs.hotspot.HotspotApplication"/>
-<fullyQualifiedTypeName name="org.ebulabs.hotspot.R.string"/>
-<fullyQualifiedTypeName name="org.apache.http.client.HttpClient"/>
-<fullyQualifiedTypeName name="org.apache.http.impl.client.DefaultHttpClient"/>
-<fullyQualifiedTypeName name="org.apache.http.message.BasicNameValuePair"/>
-<fullyQualifiedTypeName name="java.util.List"/>
-<fullyQualifiedTypeName name="org.apache.http.NameValuePair"/>
-<fullyQualifiedTypeName name="org.apache.http.client.entity.UrlEncodedFormEntity"/>
 <fullyQualifiedTypeName name="org.apache.http.HttpResponse"/>
 <fullyQualifiedTypeName name="org.apache.http.client.methods.HttpPost"/>
 <fullyQualifiedTypeName name="android.media.MediaPlayer"/>
@@ -17,7 +7,6 @@
 <fullyQualifiedTypeName name="java.util.Map"/>
 <fullyQualifiedTypeName name="java.util.Map.Entry"/>
 <fullyQualifiedTypeName name="android.net.wifi.WifiManager.MulticastLock"/>
-<fullyQualifiedTypeName name="javax.jmdns.JmDNS"/>
 <fullyQualifiedTypeName name="org.ebulabs.hotspot.DiscoverHotspot"/>
 <fullyQualifiedTypeName name="javax.jmdns.impl.JmDNSImpl"/>
 <fullyQualifiedTypeName name="java.sql.Driver"/>
@@ -31,7 +20,6 @@
 <fullyQualifiedTypeName name="java.net.Inet4Address"/>
 <fullyQualifiedTypeName name="android.text.format.Formatter"/>
 <fullyQualifiedTypeName name="android.net.wifi.WifiInfo"/>
-<fullyQualifiedTypeName name="java.net.InetAddress"/>
 <fullyQualifiedTypeName name="java.net.Socket"/>
 <fullyQualifiedTypeName name="org.ebulabs.hotspot.HotspotException"/>
 <fullyQualifiedTypeName name="org.ebu.medialab.player.RadioVis"/>
@@ -57,7 +45,19 @@
 <fullyQualifiedTypeName name="android.graphics.BitmapFactory"/>
 <fullyQualifiedTypeName name="android.graphics.Bitmap"/>
 <fullyQualifiedTypeName name="android.widget.ImageView"/>
-<fullyQualifiedTypeName name="org.ebulabs.hotspot.R.id"/>
 <fullyQualifiedTypeName name="java.io.IOException"/>
 <fullyQualifiedTypeName name="org.ebulabs.radiodns.RadioVisDAB"/>
+<fullyQualifiedTypeName name="java.net.InetAddress"/>
+<fullyQualifiedTypeName name="HotspotListener"/>
+<fullyQualifiedTypeName name="javax.jmdns.JmDNS"/>
+<fullyQualifiedTypeName name="org.ebulabs.hotspot.R.layout"/>
+<fullyQualifiedTypeName name="android.widget.Button"/>
+<fullyQualifiedTypeName name="android.view.View"/>
+<fullyQualifiedTypeName name="android.widget.CheckBox"/>
+<fullyQualifiedTypeName name="android.widget.CompoundButton.OnCheckedChangeListener"/>
+<fullyQualifiedTypeName name="android.widget.EditText"/>
+<fullyQualifiedTypeName name="org.ebulabs.hotspot.R.id"/>
+<fullyQualifiedTypeName name="org.ebulabs.hotspot.R.string"/>
+<fullyQualifiedTypeName name="org.ebulabs.hotspot.HotspotApplication"/>
+<fullyQualifiedTypeName name="org.ebulabs.hotspot.ChooseTechActivity"/>
 </qualifiedTypeNameHistroy>

@@ -69,7 +69,7 @@
 		<section name="DialogBoundsSettings">
 			<item value="600" key="DIALOG_WIDTH"/>
 			<item value="155" key="DIALOG_Y_ORIGIN"/>
-			<item value="344" key="DIALOG_X_ORIGIN"/>
+			<item value="277" key="DIALOG_X_ORIGIN"/>
 			<item value="500" key="DIALOG_HEIGHT"/>
 			<item value="1|Sans|9.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 		</section>
