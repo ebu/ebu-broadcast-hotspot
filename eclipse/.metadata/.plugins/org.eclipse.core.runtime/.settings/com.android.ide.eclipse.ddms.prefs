@@ -1,4 +1,4 @@
-#Mon Aug 29 17:34:13 CEST 2011
+#Tue Aug 30 17:40:10 CEST 2011
 threadPanel.stack.col0=139
 emulatorControl.waypoint.desc=116
 emulatorControl.track.first=145
@@ -26,7 +26,7 @@ allocPanel.Col2=34
 com.android.ide.eclipse.ddms.explorer.size=58
 allocPanel.Col1=99
 allocPanel.Col0=34
-com.android.ide.eclipse.ddms.logcat.tag=208
+com.android.ide.eclipse.ddms.logcat.tag=302
 eclipse.preferences.version=1
 com.android.ide.eclipse.ddms.logcatFont=1|Inconsolata|10.0|0|GTK|1|;
 heapPanel.col6=235
