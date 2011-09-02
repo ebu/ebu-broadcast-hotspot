@@ -1,71 +1,62 @@
 <html>
     <head>
         <title>EBU Broadcast Hotspot - Requirements and Installation</title>
-        <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
-        <style type="text/css">
-            body
-            {
-                font-family:verdana,sans-serif;
-                color:#555;
-            }
-            span.cmd {
-                font-family:courier,monospace
-            }
-            p {
-                text-indent: 1em;
-            }
-            h2,h3 {
-                border-top:5px solid #eee;
-            }
-            a {
-                color: #5050a0;
-            }
-            a:hover {
-                color: #5050a0;
-            }
-
-        </style>
+        <meta name="robots" content="noindex, nofollow">
+        <link rel="stylesheet" type="text/css" href="style.css" />
     </head>
 <body>
 
-<a href="http://tech.ebu.ch"><img src="/radiovismanager/img/ebulogo.png" border=0 style="float:left; padding-right:30px;"></a>
+    <div class="container">
+        <div class="logo">
+            <a href="http://tech.ebu.ch"><img src="http://www.ebulabs.org/radiovismanager/img/ebulogo.png" /></a>
+        </div>
+        <div class="head">
 
-<h1>EBU Broadcast Hotspot &mdash; Requirements and Installation</h1>
+            <h1>Requirements and Installation</h1>
 
-<h3>Contact</h3>
-<p><address>Author: <b>Matthias Br&auml;ndli</b></address></p>
-<p><address>Contact: <b>Mathias Coinchon</b><br /><i>coinchon@ebu.ch</i><br /><i>+41 22 717 27 16</i></address></p>
+            <div class="contact"><b>Contact</b>
+                <p><address>Author: <b>Matthias Br&auml;ndli</b></address></p>
+                <p><address>Contact: <b>Mathias Coinchon</b><br /><i>coinchon@ebu.ch</i><br /><i>+41 22 717 27 16</i></address></p>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
 
-<h2>Requirements</h2>
 
-<p>In addition to those the requirements for OpenMokast, the hotspot requires the following libraries and
-software components to be installed on the machine:</p>
-<ul>
-    <li>python (version 2.6) with the following modules:</li>
+    <div class="chapeau">This page describes the installation procedure for the hotspot and all required components.</div>
+
+
+    <h2>Requirements</h2>
+
+    <p>In addition to those the requirements for OpenMokast, the hotspot requires the following libraries and
+    software components to be installed on the machine:</p>
     <ul>
-        <li>avahi</li>
-        <li>dbus</li>
+        <li>python (version 2.6) with the following modules:</li>
+        <ul>
+            <li>avahi</li>
+            <li>dbus</li>
+        </ul>
+        <li>VLC with a complete libavcodec. In some distributions (notably Debian and Ubuntu), the libavcodec does not include an MP3 encoder. It is therefore
+        required to install the library from a third party repository. For Debian, you can use <a href="http://debian-multimedia.org/">debian-multimedia</a>.
+        For Ubuntu, use package <span class="cmd">libavcodec-extra-52</span> from <a href="http://medibuntu.org">medibuntu</a>.</li>
     </ul>
-    <li>VLC with a complete libavcodec. In some distributions (notably Debian and Ubuntu), the libavcodec does not include an MP3 encoder. It is therefore
-    required to install the library from a third party repository. For Debian, you can use <a href="http://debian-multimedia.org/">debian-multimedia</a>.
-    For Ubuntu, use package <span class="cmd">libavcodec-extra-52</span> from <a href="http://medibuntu.org">medibuntu</a>.</li>
-</ul>
 
-<p>For the development machine, you will at least need the <span class="cmd">adb</span> tool from the android SDK if you want to program you android phone.
-It can be useful to install the whole SDK including Eclipse if you intend to modify the application. More details are available
-<a href="http://developer.android.com/sdk">on the android website</a>. The application has been written for Android 2.2, and is known to work on android 2.3 phones
-as well. Choose your version according to your device.
+    <p>For the development machine, you will at least need the <span class="cmd">adb</span> tool from the android SDK if you want to program you android phone.
+    It can be useful to install the whole SDK including Eclipse if you intend to modify the application. More details are available
+    <a href="http://developer.android.com/sdk">on the android website</a>. The application has been written for Android 2.2, and is known to work on android 2.3 phones
+    as well. You can, in addition to 2.2, also choose your version according to your device.
 
-<h2>Installation</h2>
+    <h2>Installation</h2>
 
-<p>First, install the required dependencies and compile and install the modified version of OpenMokast according to its own documentation.</p>
+    <p>First, install the required dependencies and compile and install OpenMokast according to its own documentation. You need to take the latest SVN version
+    on the sourceforge <a href="https://sourceforge.net/projects/openmokast/">project page</a> which includes some modifications for the dbus interface.</p>
 
-<p>Install the aforementioned dependencies and libraries.</p>
+    <p>Install the aforementioned dependencies and libraries.</p>
 
-<p>Make sure that VLC works, especially transcoding, by executing the following command:<br />
-<span class="cmd">cvlc -v audio --sout "#transcode{vcodec=none,acodec=mp3,ab=320,channels=2,samplerate=48000}:http{dst=:8080/audio.mp3}"</span>
-where <span class="cmd">audio</span> is some audio file.
+    <p>Make sure that VLC works, especially transcoding, by executing the following command:<br />
+    <span class="cmd">cvlc -v audio --sout "#transcode{vcodec=none,acodec=mp3,ab=320,channels=2,samplerate=48000}:http{dst=:8080/audio.mp3}"</span>
+    where <span class="cmd">audio</span> is some audio file.
 
-<p>The Hotspot Daemon does not need any compilation or preparation. If you want to put it somewhere else, take care to copy all files to the same place.</p>
+    <p>The Hotspot Daemon does not need any compilation or preparation. If you want to put it somewhere else, take care to copy all files to the same place.</p>
 
 </body></html>
