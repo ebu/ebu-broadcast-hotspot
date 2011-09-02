@@ -1,3 +1,9 @@
+# This file is part of the EBU Broadcast Hotspot
+# Copyright (c) 2011 European Broadcasting Union
+# http://www.ebulabs.org
+#
+# LICENSE: see LICENSE
+
 dab_channels = {'5A': 174928000,
         '5B': 176640000,
         '5C': 178352000,

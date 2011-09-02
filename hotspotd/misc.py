@@ -1,3 +1,9 @@
+# This file is part of the EBU Broadcast Hotspot
+# Copyright (c) 2011 European Broadcasting Union
+# http://www.ebulabs.org
+#
+# LICENSE: see LICENSE
+
 from xml.etree import ElementTree as ET
 
 # for get_ip_address
