@@ -1,5 +1,0 @@
-package org.ebu.medialab.player;
-
-public interface RadioVisCallbacks {
-
-}
