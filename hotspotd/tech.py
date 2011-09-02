@@ -1,3 +1,9 @@
+# This file is part of the EBU Broadcast Hotspot
+# Copyright (c) 2011 European Broadcasting Union
+# http://www.ebulabs.org
+#
+# LICENSE: see LICENSE
+
 # Definition of the different techs
 
 import devicecontrollers as dc
