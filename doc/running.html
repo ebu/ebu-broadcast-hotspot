@@ -24,6 +24,38 @@
 
     <div class="chapeau">This page explains how to start the hotspot daemon and how to use it.</div>
 
+    <h2>1: DBUS session</h2>
+    <p>Before starting anything, make sure a dbus session is running. If you are using a graphical user interface (e.g. GNOME, KDE, XFCE, etc...) you will
+    be okay, and you can skip this step.</p>
+    <p>If this is not the case (i.e. you are on a linux text console, or using a windowmanager without dbus like fluxbox), you must start dbus manually.
+    The easiest way to do this is to launch GNU Screen with its own dbus session. <b>Only programs launched from a Screen window</b> will be able
+    to communicate with each other. Therefore, you must launch openmokast and hotspotd <b>in the same Screen</b>.</p>
+    <p>To start the dbus session, execute:</p>
+    <p><span class="cmd">dbus-launch screen</span></p>
+    <p>If you do not know how to use GNU Screen, please read its man-page.</p>
+
+    
+    <h2>2: OpenMokast</h2>
+    <p>Start openmokast. No specific options are required. You must run OpenMokast before the Hotspot Daemon, because it has to connect to the dbus bus first.</p>
+    <p>If you do not want the GUI to show up, call:
+    <span class="cmd">openmokast -c [other options]</span></p>
+
+    <p>You can also specify you DAB source:</p>
+    <p>Using the Albrecht DR 403 USB receiver: <span class="cmd">openmokast -c -M</span></p>
+    <p>Using and ETI file: <span class="cmd">openmokast -c -e &lt;example.eti&gt;</span></p>
+
+
+    <h2>3: Hotspot Daemon</h2>
+    <p>Finally, you have to start the hotspot daemon. You must <span class="cmd">cd</span> to the <span class="cmd">hotspotd</span> folder and call:
+    <span class="cmd">./hotspotd.py</span>.
+    
+    <h2>4: Android application</h2>
+    <p>Launch the android application on your device. To make sure that your wifi connection is ok, you can go to the hotspot webpage using
+    <span class="cmd">http://&lt;hotspot ip address&gt;:8080</span>. This URL is also the one the application uses, and you can set it by pressing on the
+    menu button in the application.</p>
+    <p>You can then choose between different technologies (you should see DAB as only entry in the list). Then, a list of programmes is presented. Clicking
+    on one of these starts the player after some delay. Also, RadioVIS slides and RadioText are shown on the screen, in addition to the parameters of the 
+    chosen programme. A tap on the slide will start a browser to the associated link URL.</p>
 
 
 </body></html>
