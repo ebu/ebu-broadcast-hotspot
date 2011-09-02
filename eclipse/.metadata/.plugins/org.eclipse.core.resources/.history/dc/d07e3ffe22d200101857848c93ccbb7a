@@ -1,5 +1,0 @@
-package org.ebulabs.radiodns;
-
-public class RadioDNSException {
-
-}

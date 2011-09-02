@@ -1,3 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">&#x0A;<refactoring comment="Delete resource &apos;XMLRPC&apos;" deleteContents="false" description="Delete resource &apos;XMLRPC&apos;" element1="/XMLRPC" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1310734781602"/>&#x0A;<refactoring comment="Delete resource &apos;android-xmlrpc&apos;" deleteContents="false" description="Delete resource &apos;android-xmlrpc&apos;" element1="/android-xmlrpc" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1310739279233"/>
-</session>
