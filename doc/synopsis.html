@@ -15,7 +15,7 @@
             <h1>Synopsis</h1>
 
             <div class="contact"><b>Contact</b>
-                <p><address>Author: <b>Matthias Br&auml;ndli</b></address></p>
+                <p><address>Author: <b>Matthias Br&auml;ndli</b><br /><i>mpbraend@gmail.com</i></address></p>
                 <p><address>Contact: <b>Mathias Coinchon</b><br /><i>coinchon@ebu.ch</i><br /><i>+41 22 717 27 16</i></address></p>
             </div>
         </div>
@@ -27,7 +27,7 @@
 
 
     <h2>Introduction</h2>
-    <p>A broadcast hotspot is a piece of software which allows a user to receive a over-the-air broadcast signal on a device
+    <p>A broadcast hotspot is a piece of hardware which allows a user to receive a over-the-air broadcast signal on a device
     that does not have a corresponding receiver. The hotspot therefore must receive the signal, if necessary recode it into
     a format that the user device can play, and transmit it over a medium which the user device can communicate over. In most
     scenarios, this medium is WiFi, because it is well-supported and available on most devices.</p>
@@ -35,6 +35,9 @@
     <p>On the user device, a dedicated application has to communicate with the hotspot. This application enables the user to choose
     between different receivers, presents the programmes and plays the content. Furthermore, for radio applications, it also
     receives slideshow and text data from <a href="http://www.radiodns.org">RadioDNS</a>.</p>
+
+    <p>In this project, the hotspot is implemented in software on a linux computer using only standard hardware (except maybe for
+    a USB DAB receiver). This software is described here.</p>
 
 
     <h2>Components</h2>
@@ -90,7 +93,7 @@
 
     <h3>Receiver and OpenMokast</h3>
     <p>The open-source version of OpenMokast is capable of decoding MP2 DAB services, which in turn can be read by several audio players, including mplayer and VLC.
-    However, the open-source version does not extract the AAC bitstream from DAB+ programmes, which makes it impossible to decode those programmes. Furthermore, there
+    However, the open-source version does not extract the AAC bit-stream from DAB+ programmes, which makes it impossible to decode those programmes. Furthermore, there
     are no open-source programs that can convert DAB+ super-frames to an AAC that is readable by standard audio players.</p>
 
     <p><b>For this reason, the hotspot only works for DAB (MP2) services</b></p>
@@ -109,7 +112,9 @@
 
     <h3>User Device Application</h3>
     <p>An android phone has been chosen as development platform for the end user device.</p>
-    <font color="#FF0000" size=5>TODO</font>
+    <p>The android application (called <span class="cmd">broadcastinghostpot</span>) connects to the Hotspot Daemon and to the VLC streams. It uses the HTTP+XML
+    interface to receive information concerning receiver technologies, programmes and programme details, and to instruct the hotspot on what to do.</p>
+    <p>Furthermore, it includes a RadioVis client, and shows the slideshow related to the selected programme.</p>
 
 
     <h2>Features in development</h2>
@@ -133,5 +138,7 @@
 
     <h3>Delay when starting stream</h3>
     <p>There is a very long delay when the user clicks on a programme. It is certainly possible to reduce it, and to make the user interface more responsive.</p>
+
+    <div class="footer">&copy; 2011, European Broadcasting Union<span class="footerauthor">September 2011, Matthias P. Br&auml;ndli</span></div>
 
 </body></html>

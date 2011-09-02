@@ -1,7 +1,9 @@
+/* (C) 2011 EBU */
 body {
     font-family:verdana,sans-serif;
     color:#555;
     width:60em;
+    padding-left: 1em;
 }
 span.cmd {
     font-family:courier,monospace
@@ -28,15 +30,23 @@ div.chapeau {
 div.contact {
     font-size:80%;
 }
-
 div.container {
     margin: 4pt;
 }
-
 div.head {
     float:left;
 }
+div.footer {
+    margin:0px;
+    margin-top:2em;
+    padding-top: 1em;
+    border-top:1px solid #888;
+    font-size: 60%;
+}
+span.footerauthor {
+    float: right;
 
+}
 div.logo {
     float:left;
     padding-right:30px;
